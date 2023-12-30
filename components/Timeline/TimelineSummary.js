@@ -25,7 +25,7 @@ function TimelineSummary({ events, periodName }) {
     // Convert aggregatedData to the format expected by the chart library
     const chartData = Object.keys(aggregatedData).map((date) => ({
       value: aggregatedData[date],
-      label: date,
+      label: date.slice(0, 5),
       labelTextStyle: { color: "white", fontSize: 10 },
     }))
     return chartData

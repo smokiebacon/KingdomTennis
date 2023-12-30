@@ -1,20 +1,23 @@
-import { TextInput, Text } from "react-native-paper"
-import { View, Pressable } from "react-native"
+import { TextInput, ToggleButton } from "react-native-paper"
+import { View, Pressable, StyleSheet } from "react-native"
 import { useState } from "react"
 import Button from "../../UI/Button"
+import { Picker } from "@react-native-picker/picker"
+
 import { format } from "date-fns"
 import { getFormattedDate } from "../../util/date"
 
 import DateTimePicker from "@react-native-community/datetimepicker"
-function EventForm({ event, onSubmit, isEditting, defaultValues }) {
+function EventForm({ onSubmit, isEditting, defaultValues }) {
   const [inputValues, setInputValues] = useState({
     notes: defaultValues ? defaultValues.notes : "",
     duration: defaultValues ? defaultValues.duration.toString() : "",
-    date: defaultValues ? defaultValues.date : new Date().toLocaleDateString(),
+    date: defaultValues ? defaultValues.date : new Date(),
     court: defaultValues ? defaultValues.court : "",
     teammate: defaultValues ? defaultValues.teammate : "",
     opponent: defaultValues ? defaultValues.opponent : "",
     opponent2: defaultValues ? defaultValues.opponent2 : "",
+    session: defaultValues ? defaultValues.session : "Rally",
   })
 
   const [showPicker, setShowPicker] = useState(false)
@@ -30,27 +33,32 @@ function EventForm({ event, onSubmit, isEditting, defaultValues }) {
     showMode("date")
   }
 
-  function changeDateToYesterday(date) {
-    const yesterdaysDate = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate() - 1
-    )
-    setInputValues((currentInputValues) => {
-      return {
-        ...currentInputValues,
-        ["date"]: yesterdaysDate,
-      }
-    })
-  }
+  // function changeDateToYesterday(date) {
+  //   const yesterdaysDate = new Date(
+  //     date.getFullYear(),
+  //     date.getMonth(),
+  //     date.getDate() - 1
+  //   )
+  //   setInputValues((currentInputValues) => {
+  //     return {
+  //       ...currentInputValues,
+  //       ["date"]: date,
+  //     }
+  //   })
+  // }
 
-  const onChange = (selectedDate) => {
-    setInputValues((currentInputValues) => {
-      return {
-        ...currentInputValues,
-        ["date"]: selectedDate,
-      }
-    })
+  // const onChange = (selectedDate) => {
+  //   setInputValues((currentInputValues) => {
+  //     return {
+  //       ...currentInputValues,
+  //       ["date"]: selectedDate,
+  //     }
+  //   })
+  //   setShowPicker(false)
+  // }
+
+  const onDateChange = (event, selectedDate) => {
+    setDate(selectedDate)
     setShowPicker(false)
   }
 
@@ -74,11 +82,12 @@ function EventForm({ event, onSubmit, isEditting, defaultValues }) {
     const eventData = {
       notes: inputValues.notes,
       duration: +inputValues.duration,
-      date: inputValues.date,
+      date: date.toLocaleDateString(), //should be an Object in DatePicker but Supabase wants as a string
       court: inputValues.court,
       teammate: inputValues.teammate,
       opponent: inputValues.opponent,
       opponent2: inputValues.opponent2,
+      session: inputValues.session,
     }
 
     // const durationIsValid =
@@ -90,17 +99,17 @@ function EventForm({ event, onSubmit, isEditting, defaultValues }) {
   }
   return (
     <View>
-      {showPicker && (
+      {showPicker ? (
         <DateTimePicker
-          value={inputValues.date}
+          value={date} //needs to be an Object
           testID="dateTimePicker"
           mode={mode}
-          onChange={onChange}
+          onChange={onDateChange}
         />
-      )}
-      <Text>{inputValues.date}</Text>
-      {/* <TextInput
-        value={getFormattedDate(inputValues.date)}
+      ) : null}
+      {/* <Text>{inputValues.date}</Text> */}
+      <TextInput
+        value={date.toLocaleDateString()}
         onChangeText={inputChange.bind(this, "date")}
         outlineColor="green"
         left={
@@ -117,7 +126,7 @@ function EventForm({ event, onSubmit, isEditting, defaultValues }) {
             forceTextInputFocus={false}
           />
         }
-      /> */}
+      />
       <TextInput
         label="Court Location"
         value={inputValues.court}
@@ -131,7 +140,19 @@ function EventForm({ event, onSubmit, isEditting, defaultValues }) {
         keyboardType="decimal-pad"
         onChangeText={inputChange.bind(this, "duration")}
       />
-      {event === "Doubles" ? (
+      <Picker
+        itemStyle={{
+          color: "#008b8b",
+        }}
+        selectedValue={inputValues.session}
+        onValueChange={inputChange.bind(this, "session")}
+      >
+        <Picker.Item label="Singles" value="Singles" />
+        <Picker.Item label="Doubles" value="Doubles" />
+        <Picker.Item label="Rally" value="Rally" />
+        <Picker.Item label="Practice" value="Practice" />
+      </Picker>
+      {inputValues.session === "Doubles" ? (
         <>
           <TextInput
             label="Teammate"
@@ -149,7 +170,7 @@ function EventForm({ event, onSubmit, isEditting, defaultValues }) {
       ) : (
         ""
       )}
-      {event === "Singles" || "Rally" ? (
+      {inputValues.session === "Singles" || "Rally" ? (
         <TextInput
           label="Opponent 1"
           value={inputValues.opponent}
@@ -173,3 +194,7 @@ function EventForm({ event, onSubmit, isEditting, defaultValues }) {
   )
 }
 export default EventForm
+const styles = StyleSheet.create({
+  picker: { backgroundColor: "white" },
+  pickerFont: { color: "black" },
+})

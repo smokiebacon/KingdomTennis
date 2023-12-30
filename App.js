@@ -16,7 +16,6 @@ import * as SplashScreen from "expo-splash-screen"
 import AuthContextProvider from "./store/auth-context"
 import EventsContextProvider from "./store/events-context"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import supabase from "./supabaseClient"
 
 const Stack = createNativeStackNavigator()
 const BottomTabs = createBottomTabNavigator()

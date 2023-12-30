@@ -10,12 +10,13 @@ export const EventsContext = createContext({
     teammate,
     opponent,
     opponent2,
+    session,
   }) => {},
   setEvents: (events) => {},
   deleteEvent: (id) => {},
   editEvent: (
     id,
-    { notes, duration, date, court, teammate, opponent, opponent2 }
+    { notes, duration, date, court, teammate, opponent, opponent2, session }
   ) => {},
 })
 

@@ -39,16 +39,11 @@ export async function getEvents() {
 //   return events
 // }
 
-export function updateEvent(id, eventData) {
-  console.log(id, " in updateEvent http.js")
-  console.log(eventData, " eventData in updateEvent http.js")
-
-  supabase.from("Events").update(eventData).eq("id", id)
+export async function updateEvent(id, eventData) {
+  await supabase.from("Events").update(eventData).eq("id", id)
   // return axios.put(URL + `/events/${id}.json`, eventData)
 }
-
-export function deleteEventBackend(id) {
-  console.log(id, "id from deleteEventBackend in httpjs")
-  supabase.from("Events").delete().eq("id", id)
+export async function deleteEventBackend(id) {
+  await supabase.from("Events").delete().eq("id", id)
   // return axios.delete(URL + `/events/${id}.json`)
 }

@@ -21,14 +21,8 @@ function ManageMatch({ route, navigation }) {
   const eventCtx = useContext(EventsContext)
   const editedMatchId = route.params?.eventId
   const isEditting = !!editedMatchId //true or false if edit match id exists; !!trasnfer into a boolean
-  const [visible, setVisible] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState()
-  const containerStyle = { backgroundColor: "white", padding: 20 }
-
-  const showModal = () => setVisible(true)
-  const hideModal = () => setVisible(false)
-  const [event, setEvent] = useState("Rally")
 
   async function deleteEvent() {
     setIsLoading(true)
@@ -94,38 +88,9 @@ function ManageMatch({ route, navigation }) {
       <Divider />
       <EventForm
         onSubmit={confirmHandler}
-        event={event}
         isEditting={isEditting}
         defaultValues={selectedEvent}
       />
-      <PaperProvider>
-        <Portal>
-          <Modal
-            visible={visible}
-            onDismiss={hideModal}
-            contentContainerStyle={containerStyle}
-          >
-            <SegmentedButtons
-              value={event}
-              onValueChange={setEvent}
-              buttons={[
-                {
-                  value: "Singles",
-                  label: "Singles",
-                },
-                {
-                  value: "Doubles",
-                  label: "Doubles",
-                },
-                { value: "Rally", label: "Rally" },
-              ]}
-            />
-          </Modal>
-        </Portal>
-        <Button style={{ marginTop: 30 }} onPress={showModal}>
-          Change Event Type
-        </Button>
-      </PaperProvider>
     </View>
   )
 }

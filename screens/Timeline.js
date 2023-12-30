@@ -1,7 +1,7 @@
 import Timeline from "../components/Timeline/Timeline"
 import { EventsContext } from "../store/events-context"
 import { useState, useContext, useEffect } from "react"
-import { getAllEvents, getEvents } from "../util/http"
+import { getEvents } from "../util/http"
 import DropdownComponent from "../components/Timeline/DropdownComponent"
 import LoadingOverlay from "../UI/LoadingOverlay"
 import ErrorOverlay from "../UI/ErrorOverlay"

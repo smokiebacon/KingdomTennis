@@ -12,6 +12,7 @@ function TimelineItem({
   teammate,
   opponent,
   opponent2,
+  session,
 }) {
   const navigation = useNavigation()
 
@@ -38,6 +39,7 @@ function TimelineItem({
             <Text style={styles.textBase} variant="bodyMedium">
               {court}
             </Text>
+            {session}
             <Text style={styles.textBase} variant="bodyMedium">
               {teammate}
             </Text>
