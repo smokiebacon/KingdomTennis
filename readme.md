@@ -27,7 +27,9 @@ User Profile As a user, user should be able to: Choose a date, add a session, ei
 ## User Interface and User Experience
 
 We are essentially copying the Budget App named "Spendee"'s User Interface.
+
 [Spendee](https://www.spendee.com/)
+
 [Spendee Screenshot Images](https://imgur.com/a/CAYidxB)
 
 [Current Application development images](https://imgur.com/a/ScmZzcX/)
