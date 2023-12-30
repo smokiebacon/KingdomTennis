@@ -25,3 +25,26 @@ Bar Chart: implementing daily/weekly/monthly/yearly/history views is hard, as th
 Implementing Datepicker: keep having object/string problems.
 On tennis session creation, SegmentGroupButtons, or ButtonGroups, are not <Text> components; keep getting errors.
 Dates: stuck on how to best make the state of Dates coherent with the rest of the form submission.
+
+Minimum Viable Product
+[ ] User can select a date via DatePicker, and change it.
+[ ] User can CRUD category of session types (Rally, Practice, Match, or Custom)
+[ ] If category is Match, then input fields should add Teammate, Opponent 1, Opponent 2, and Match Scores.
+[ ] if category is Practice/Rally, then only input field on Opponent 1. Optional to add Teammate and Opponent 2.
+[ ] User can add duration, in minutes and hours.
+[ ] User can CRUD tennis court locations. Also favorite location.
+[ ] User can add teammates/opponent names. Can favorite 3 names, such that 2v2 can be auto-filled sometimes.
+[ ] User should be able to search via input field.
+[ ] User can view daily/weekly/monthly/yearly/all history graphs.
+[ ] User can see total duration played.
+[ ] user can CRUD notes.
+
+Future Development:
+[ ] Freemium Model: App will be free, but with ads. Pay to remove ads.
+[ ] Tennis/Pickleball court location finder. Lights? How many courts? Type of court: grass/indoor/clay/hard?
+[ ] Entourage Feature: When adding teammates or opponents, if user and players are in an Entourage, also post the created Session onto their history. For example, I select a singles Match and win 6-0, 6-0 and input Sophia Name as my opponent. In Sophia's record, also add the match result.
+[ ] Invite players to use the application feature. If friend accepts, then in current user's history, all instances of the friend's name become
+a real account. The newly created invited friend's account should also populate with all of the previous match histories.
+[ ] View other player's profile. See their entire play history.
+[ ] Social profiles: add friends to create entourage.
+[ ] 1 on 1 chat.
