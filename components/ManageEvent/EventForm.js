@@ -32,7 +32,33 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
   const showDatepicker = () => {
     showMode("date")
   }
-
+  function showMatchScore() {
+    //set 1: game1Score, game2Score, game3Score, game1OpponentScore, game2OpponentScore, game3OpponentScore
+    //set 2: game1Score, game2Score, game3Score, game1OpponentScore, game2OpponentScore, game3OpponentScore
+    //set 3: game1Score, game2Score, game3Score, game1OpponentScore, game2OpponentScore, game3OpponentScore
+    // "players": {
+    //   "player1": {
+    //     "name": "Roger Federer",
+    //     "country": "Switzerland"
+    //   },
+    //   "player2": {
+    //     "name": "Novak Djokovic",
+    //     "country": "Serbia"
+    //   }
+    // },
+    // "sets": [
+    //   {
+    //     "setNumber": 1,
+    //     "games": [
+    //       {"player1": 6, "player2": 4},
+    //       {"player1": 7, "player2": 5},
+    //       // ... additional games in the set
+    //     ],
+    //     "tiebreaker": {"player1": 7, "player2": 9} // Tiebreaker for the set
+    //   },
+    //   // ... additional sets
+    // ]
+  }
   // function changeDateToYesterday(date) {
   //   const yesterdaysDate = new Date(
   //     date.getFullYear(),
@@ -150,8 +176,15 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
         <Picker.Item label="Singles" value="Singles" />
         <Picker.Item label="Doubles" value="Doubles" />
         <Picker.Item label="Rally" value="Rally" />
-        <Picker.Item label="Practice" value="Practice" />
+        <Picker.Item label="Match" value="Match" />
       </Picker>
+      {/* {inputValues.session === "Match" ?   <TextInput
+            label="Set 1"
+            value={inputValues.game_1_score}
+            placeholder="Game 1 Score"
+            onChangeText={inputChange.bind(this, "teammate")}
+          />: ('')} */}
+
       {inputValues.session === "Doubles" ? (
         <>
           <TextInput

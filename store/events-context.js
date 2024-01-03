@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react"
+import { createContext, useReducer, useState } from "react"
 
 export const EventsContext = createContext({
   events: [],
@@ -45,6 +45,7 @@ function eventsReducer(state, action) {
 
 function EventsContextProvider({ children }) {
   const [eventsState, dispatch] = useReducer(eventsReducer, [])
+  const [timePeriod, setTimePeriod] = useState("Month")
 
   function addEvent(eventData) {
     dispatch({ type: "ADD", payload: eventData })
@@ -66,6 +67,8 @@ function EventsContextProvider({ children }) {
     setEvents: setEvents,
     deleteEvent: deleteEvent,
     editEvent: editEvent,
+    timePeriod: timePeriod,
+    setTimePeriod,
   }
 
   return (

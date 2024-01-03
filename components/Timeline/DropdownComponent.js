@@ -1,7 +1,8 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { StyleSheet, Text, View } from "react-native"
 import { Dropdown } from "react-native-element-dropdown"
 import { GlobalStyles } from "../../constants/styles"
+import { EventsContext } from "../../store/events-context"
 
 const DropdownComponent = () => {
   const selectedPeriod = [
@@ -9,6 +10,8 @@ const DropdownComponent = () => {
     { label: "Month", value: "Month" },
     { label: "Year", value: "Year" },
   ]
+
+  const eventCtx = useContext(EventsContext)
 
   const [value, setValue] = useState("Month")
   const [isFocus, setIsFocus] = useState(false)
@@ -34,11 +37,11 @@ const DropdownComponent = () => {
         labelField="label"
         valueField="value"
         placeholder={!isFocus ? "Select item" : "..."}
-        value={value}
+        value={eventCtx.timePeriod}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={(item) => {
-          setValue(item.value)
+          eventCtx.setTimePeriod(item.value)
           setIsFocus(false)
         }}
       />
