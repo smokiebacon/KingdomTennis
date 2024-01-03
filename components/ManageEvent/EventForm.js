@@ -194,7 +194,3 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
   )
 }
 export default EventForm
-const styles = StyleSheet.create({
-  picker: { backgroundColor: "white" },
-  pickerFont: { color: "black" },
-})

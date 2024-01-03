@@ -117,13 +117,15 @@ Dates: stuck on how to best make the state of Dates coherent with the rest of th
 
 [ ] User can view daily/weekly/monthly/yearly/all history graphs.
 
-[ ] User can see total duration played.
+[ ] Grouped by dates.
 
-[ ] user can CRUD notes.
+[ ] User can see total duration played by time period.
 
 [ ] Light/Dark mode.
 
 [ ] Loading state is skeletons and not spinning circles (as it is now).
+
+[ ] Google Sign in / Magic Link auth.
 
 ## Future Development:
 

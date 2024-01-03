@@ -34,23 +34,37 @@ function TimelineItem({
               {date}
             </Text>
             <Text style={styles.textBase} variant="bodyMedium">
-              {notes}
-            </Text>
-            <Text style={styles.textBase} variant="bodyMedium">
               {court}
             </Text>
-            {session}
-            <Text style={styles.textBase} variant="bodyMedium">
-              {teammate}
-            </Text>
-            <Text style={styles.textBase} variant="bodyMedium">
-              {opponent}
-            </Text>
-            <Text style={styles.textBase} variant="bodyMedium">
-              {opponent2}
-            </Text>
+            {session === "Singles" || "Rally" ? (
+              <Text style={styles.textBase} variant="bodyMedium">
+                {opponent}
+              </Text>
+            ) : (
+              ""
+            )}
+            {session === "Doubles" ? (
+              <>
+                <Text style={styles.textBase} variant="bodyMedium">
+                  {teammate}
+                </Text>
+                <Text style={styles.textBase} variant="bodyMedium">
+                  {opponent}
+                </Text>
+                <Text style={styles.textBase} variant="bodyMedium">
+                  {opponent2}
+                </Text>
+              </>
+            ) : (
+              ""
+            )}
+
             <Text style={styles.duration} variant="bodyMedium">
               {duration} hr
+            </Text>
+            {/* //if settings true, show notes */}
+            <Text style={styles.textBase} variant="bodyMedium">
+              {notes}
             </Text>
           </Card.Content>
         </Card>
