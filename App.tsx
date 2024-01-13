@@ -16,6 +16,8 @@ import * as SplashScreen from "expo-splash-screen"
 import AuthContextProvider from "./store/auth-context"
 import EventsContextProvider from "./store/events-context"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { Session } from "@supabase/supabase-js"
+import supabase from "./supabaseClient"
 
 const Stack = createNativeStackNavigator()
 const BottomTabs = createBottomTabNavigator()
@@ -108,41 +110,54 @@ function MatchesOverView() {
   )
 }
 function Navigation() {
-  const authCtx = useContext(AuthContext)
+  // const authCtx = useContext(AuthContext)
+  const [session, setSession] = useState<Session | null>(null);
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+      console.log("🚀 ~ supabase.auth.getSession ~ session:", session)
+      SplashScreen.hideAsync();
+    })
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+  }, [])
   return (
     <>
-      {authCtx.isAuthenticated && <KingdomTennis />}
-      {!authCtx.isAuthenticated && <AuthStack />}
+      {session && <KingdomTennis />}
+      {!session && <AuthStack />}
     </>
   )
 }
 
-function Root() {
-  const [isTryingLogin, setIsTryingLogin] = useState(false)
-  const authCtx = useContext(AuthContext)
-  useEffect(() => {
-    async function fetchToken() {
-      const storedToken = await AsyncStorage.getItem("token")
-      if (storedToken) {
-        authCtx.authenticate(storedToken)
-      }
-      setIsTryingLogin(true)
-    }
-    fetchToken()
-  }, [])
+// function Root() {
+//   const [isTryingLogin, setIsTryingLogin] = useState(false)
+//   const authCtx = useContext(AuthContext)
+//   // useEffect(() => {
+//   //   async function fetchToken() {
+//   //     const storedToken = await AsyncStorage.getItem("token")
+//   //     if (storedToken) {
+//   //       authCtx.authenticate(storedToken)
+//   //     }
+//   //     setIsTryingLogin(true)
+//   //   }
+//   //   fetchToken()
+//   // }, [])
 
-  if (isTryingLogin) {
-    SplashScreen.hideAsync()
-  }
-  return <Navigation />
-}
+//   // if (isTryingLogin) {
+//   //   SplashScreen.hideAsync()
+//   // }
+//   return 
+// }
 
 export default function App() {
   return (
     <>
-      <AuthContextProvider>
-        <Root />
-      </AuthContextProvider>
+    <Navigation />
+      {/* <AuthContextProvider> */}
+        {/* <Root /> */}
+      {/* </AuthContextProvider> */}
     </>
   )
 }

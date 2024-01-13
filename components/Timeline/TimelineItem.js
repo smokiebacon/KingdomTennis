@@ -39,7 +39,9 @@ function TimelineItem({
             <Text style={styles.textBase} variant="bodyMedium">
               {court}
             </Text>
+            <Text style={styles.textBase} variant="bodyMedium">
             {session}
+            </Text>
             <Text style={styles.textBase} variant="bodyMedium">
               {teammate}
             </Text>

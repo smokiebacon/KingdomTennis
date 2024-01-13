@@ -1,15 +1,24 @@
-import { View, Text, TextInput, StyleSheet } from "react-native"
+import { View, Text, TextInput, StyleSheet, KeyboardType } from "react-native"
 
 import { Colors } from "../../constants/styles"
 
-function Input({
+interface InputProps  {
+  label : string;
+  keyboardType : KeyboardType,
+  secure : boolean,
+  onUpdateValue : () => {},
+  value : string;
+  isInvalid: Boolean;
+}
+
+const Input = ({
   label,
   keyboardType,
   secure,
   onUpdateValue,
   value,
   isInvalid,
-}) {
+}: InputProps)  => {
   return (
     <View style={styles.inputContainer}>
       <Text style={[styles.label, isInvalid && styles.labelInvalid]}>

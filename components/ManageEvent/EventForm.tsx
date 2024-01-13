@@ -4,10 +4,10 @@ import { useState } from "react"
 import Button from "../../UI/Button"
 import { Picker } from "@react-native-picker/picker"
 
-import { format } from "date-fns"
+import { format, subDays } from "date-fns"
 import { getFormattedDate } from "../../util/date"
 
-import DateTimePicker from "@react-native-community/datetimepicker"
+import DateTimePicker, { AndroidNativeProps, IOSNativeProps,  } from "@react-native-community/datetimepicker"
 function EventForm({ onSubmit, isEditting, defaultValues }) {
   const [inputValues, setInputValues] = useState({
     notes: defaultValues ? defaultValues.notes : "",
@@ -20,9 +20,9 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
     session: defaultValues ? defaultValues.session : "Rally",
   })
 
-  const [showPicker, setShowPicker] = useState(false)
-  const [mode, setMode] = useState("date")
-  const [date, setDate] = useState(new Date())
+  const [showPicker, setShowPicker] = useState(false);
+  const [mode, setMode] = useState<any>("date");
+  const [date, setDate] = useState(new Date());
 
   const showMode = (currentMode) => {
     setShowPicker(true)
@@ -33,19 +33,20 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
     showMode("date")
   }
 
-  // function changeDateToYesterday(date) {
-  //   const yesterdaysDate = new Date(
-  //     date.getFullYear(),
-  //     date.getMonth(),
-  //     date.getDate() - 1
-  //   )
-  //   setInputValues((currentInputValues) => {
-  //     return {
-  //       ...currentInputValues,
-  //       ["date"]: date,
-  //     }
-  //   })
-  // }
+  function changeDateToYesterday() {
+    const yesterday = subDays(new Date(), 1);
+    setDate(yesterday);
+    // setInputValues(currentInputValues => ({
+    //   ...currentInputValues,
+    //   ['date'] : yesterday,
+    // }))
+    // setInputValues((currentInputValues) => {
+    //   return {
+    //     ...currentInputValues,
+    //     ["date"]: date,
+    //   }
+    // })
+  }
 
   // const onChange = (selectedDate) => {
   //   setInputValues((currentInputValues) => {
@@ -79,9 +80,25 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
     })
   }
   function submitHandler() {
+    
+    const durationRegularExpression = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/;
+    const isValid = durationRegularExpression.test(inputValues.duration);
+    if(!isValid) {
+        return
+    }
+    console.log(typeof inputValues.duration)
+    const hoursMins = inputValues.duration.split(':')
+    console.log("🚀 ~ file: EventForm.js:84 ~ submitHandler ~ hours:", hoursMins)
+    const hour = parseInt(hoursMins[0]);
+    console.log("🚀 ~ file: EventForm.js:86 ~ submitHandler ~ hour:", hour)
+    const convertHoursToMinutes = hour * 60;
+    console.log("🚀 ~ file: EventForm.js:88 ~ submitHandler ~ convertHoursToMinutes:", convertHoursToMinutes)
+    
+    
+    
     const eventData = {
       notes: inputValues.notes,
-      duration: +inputValues.duration,
+      duration: convertHoursToMinutes + parseInt(hoursMins[1]),
       date: date.toLocaleDateString(), //should be an Object in DatePicker but Supabase wants as a string
       court: inputValues.court,
       teammate: inputValues.teammate,
@@ -89,13 +106,13 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
       opponent2: inputValues.opponent2,
       session: inputValues.session,
     }
-
+    console.log(eventData);
     // const durationIsValid =
     //   !!isNaN(eventData.duration) && eventData.duration > 0
     // if (!durationIsValid) {
     //   return
     // }
-    onSubmit(eventData)
+    // onSubmit(eventData)
   }
   return (
     <View>
@@ -112,6 +129,7 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
         value={date.toLocaleDateString()}
         onChangeText={inputChange.bind(this, "date")}
         outlineColor="green"
+        // disabled
         left={
           <TextInput.Icon
             icon="calendar"
@@ -121,7 +139,7 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
         }
         right={
           <TextInput.Icon
-            onPress={() => changeDateToYesterday(new Date())}
+            onPress={() => changeDateToYesterday()}
             icon="eye"
             forceTextInputFocus={false}
           />
@@ -136,8 +154,8 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
       <TextInput
         label="Duration"
         value={inputValues.duration}
-        placeholder="Hours and Minutes"
-        keyboardType="decimal-pad"
+        placeholder="Hours and Minutes like this '1:30'"
+        // keyboardType="decimal-pad"
         onChangeText={inputChange.bind(this, "duration")}
       />
       <Picker

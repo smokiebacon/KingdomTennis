@@ -1,5 +1,6 @@
 import axios from "axios"
 import supabase from "../supabaseClient"
+import { format } from "date-fns"
 
 const URL = "https://kingdom-tennis-default-rtdb.firebaseio.com"
 export async function storeEvent(eventData) {
@@ -14,8 +15,12 @@ export async function storeEvent(eventData) {
   return id
 }
 
-export async function getEvents() {
-  const { data, error } = await supabase.from("Events").select()
+export async function getEvents(date) {
+  console.log("🚀 ~ file: http.js:18 ~ getEvents ~ date:", date)
+  const formattedDate = format(new Date(date), 'yyyy-MM-dd')
+  console.log("🚀 ~ file: http.js:21 ~ getEvents ~ formattedDate:", formattedDate)
+  const { data, error } = await supabase.from("Events").select().gte('date', formattedDate);
+  console.log("🚀 ~ file: http.js:20 ~ getEvents ~ data:", data)
   return data
 }
 
