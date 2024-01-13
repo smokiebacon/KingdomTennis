@@ -2,9 +2,8 @@ import { View, Text, StyleSheet, Dimensions } from "react-native"
 import { BarChart } from "react-native-gifted-charts"
 import { GlobalStyles } from "../../constants/styles"
 import { getShortenedFormattedDate } from "../../util/date"
-function TimelineSummary({ events, periodName }) {
-  // const [period, setPeriod] = useState("Week")
 
+function TimelineSummary({ events, periodName }) {
   const aggregateDataByDate = (events) => {
     const aggregatedData = {}
 

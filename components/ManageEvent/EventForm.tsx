@@ -168,8 +168,15 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
         <Picker.Item label="Singles" value="Singles" />
         <Picker.Item label="Doubles" value="Doubles" />
         <Picker.Item label="Rally" value="Rally" />
-        <Picker.Item label="Practice" value="Practice" />
+        <Picker.Item label="Match" value="Match" />
       </Picker>
+      {/* {inputValues.session === "Match" ?   <TextInput
+            label="Set 1"
+            value={inputValues.game_1_score}
+            placeholder="Game 1 Score"
+            onChangeText={inputChange.bind(this, "teammate")}
+          />: ('')} */}
+
       {inputValues.session === "Doubles" ? (
         <>
           <TextInput
@@ -212,7 +219,3 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
   )
 }
 export default EventForm
-const styles = StyleSheet.create({
-  picker: { backgroundColor: "white" },
-  pickerFont: { color: "black" },
-})

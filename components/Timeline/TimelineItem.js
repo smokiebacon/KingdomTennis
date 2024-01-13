@@ -34,9 +34,6 @@ function TimelineItem({
               {date}
             </Text>
             <Text style={styles.textBase} variant="bodyMedium">
-              {notes}
-            </Text>
-            <Text style={styles.textBase} variant="bodyMedium">
               {court}
             </Text>
             <Text style={styles.textBase} variant="bodyMedium">
@@ -53,6 +50,10 @@ function TimelineItem({
             </Text>
             <Text style={styles.duration} variant="bodyMedium">
               {duration} hr
+            </Text>
+            {/* //if settings true, show notes */}
+            <Text style={styles.textBase} variant="bodyMedium">
+              {notes}
             </Text>
           </Card.Content>
         </Card>

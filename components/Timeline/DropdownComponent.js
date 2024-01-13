@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react"
 import { StyleSheet, Text, View } from "react-native"
 import { Dropdown } from "react-native-element-dropdown"
 import { GlobalStyles } from "../../constants/styles"
+import { EventsContext } from "../../store/events-context"
 
 import { EventsContext } from "../../store/events-context"
 const DropdownComponent = ({ value, setValue }) => {

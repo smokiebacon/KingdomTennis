@@ -15,6 +15,14 @@ function History() {
   useEffect(() => {
     async function fetchEvents() {
       setIsLoading(true)
+      let date = ""
+      if (eventsCtx.timePeriod == "Month") {
+        date = startOfMonth(todaysDate)
+      } else if (eventsCtx.timePeriod == "Year") {
+        date = startOfYear(todaysDate)
+      } else {
+        date = startOfWeek(todaysDate)
+      }
       try {
         let wDate = new Date();
        
