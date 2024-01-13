@@ -26,11 +26,13 @@ function AuthContent({ isLogin, onAuthenticate }) {
     let { email, confirmEmail, password, confirmPassword } = credentials
 
     email = email.trim()
+    console.log("🚀 ~ submitHandler ~ email:", email)
     password = password.trim()
 
     const emailIsValid = email.includes("@")
     const passwordIsValid = password.length > 6
     const emailsAreEqual = email === confirmEmail
+    console.log("🚀 ~ submitHandler ~ emailsAreEqual:", emailsAreEqual)
     const passwordsAreEqual = password === confirmPassword
 
     if (

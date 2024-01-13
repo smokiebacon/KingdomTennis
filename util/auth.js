@@ -1,8 +1,9 @@
 import axios from "axios"
-
+import supabase from "../supabaseClient"
 const KEY = "AIzaSyAVyOfZKwdQqbgJJe19gZJeG0BLislk3vo"
 
 async function authenticate(mode, email, password) {
+  console.log("🚀 ~ authenticate ~ mode:", mode)
   const url = `https://identitytoolkit.googleapis.com/v1/accounts:${mode}?key=${KEY}`
 
   const response = await axios.post(url, {
@@ -14,8 +15,12 @@ async function authenticate(mode, email, password) {
   return token
 }
 
-export function createUser(email, password) {
-  return authenticate("signUp", email, password)
+export async function createUser(email, password) {
+  const { error, } = await supabase.auth.signInWithPassword({
+    email: email,
+    password,
+  })
+  // return authenticate("signUp", email, password)
 }
 
 export function loginUser(email, password) {

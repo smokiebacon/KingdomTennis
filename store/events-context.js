@@ -45,9 +45,9 @@ function eventsReducer(state, action) {
 
 function EventsContextProvider({ children }) {
   const [eventsState, dispatch] = useReducer(eventsReducer, [])
-  const [timePeriod, setTimePeriod] = useState("Month")
-
+  const [timelinePeriod, setTimeLinePeriod] = useState('Month')
   function addEvent(eventData) {
+    // console.log("🚀 ~ file: events-context.js:50 ~ addEvent ~ eventData:", eventData)
     dispatch({ type: "ADD", payload: eventData })
   }
   function setEvents(events) {
@@ -67,8 +67,8 @@ function EventsContextProvider({ children }) {
     setEvents: setEvents,
     deleteEvent: deleteEvent,
     editEvent: editEvent,
-    timePeriod: timePeriod,
-    setTimePeriod,
+    timelinePeriod: timelinePeriod,
+    setTimeLinePeriod,
   }
 
   return (

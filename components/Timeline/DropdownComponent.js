@@ -4,16 +4,18 @@ import { Dropdown } from "react-native-element-dropdown"
 import { GlobalStyles } from "../../constants/styles"
 import { EventsContext } from "../../store/events-context"
 
-const DropdownComponent = () => {
+import { EventsContext } from "../../store/events-context"
+const DropdownComponent = ({ value, setValue }) => {
+  const eventsCtx = useContext(EventsContext)
+  console.log("🚀 ~ file: DropdownComponent.js:9 ~ DropdownComponent ~ eventsCtx:", eventsCtx.timelinePeriod)
   const selectedPeriod = [
     { label: "Week", value: "Week" },
     { label: "Month", value: "Month" },
     { label: "Year", value: "Year" },
   ]
 
-  const eventCtx = useContext(EventsContext)
-
-  const [value, setValue] = useState("Month")
+  // const [value, setValue] = useState("Month")
+  // console.log("🚀 ~ file: DropdownComponent.js:14 ~ DropdownComponent ~ value:", value)
   const [isFocus, setIsFocus] = useState(false)
 
   const renderLabel = () => {
@@ -37,11 +39,11 @@ const DropdownComponent = () => {
         labelField="label"
         valueField="value"
         placeholder={!isFocus ? "Select item" : "..."}
-        value={eventCtx.timePeriod}
+        value={eventsCtx.timelinePeriod}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={(item) => {
-          eventCtx.setTimePeriod(item.value)
+          eventsCtx.setTimeLinePeriod(item.value)
           setIsFocus(false)
         }}
       />

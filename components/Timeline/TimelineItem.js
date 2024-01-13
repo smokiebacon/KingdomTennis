@@ -36,29 +36,18 @@ function TimelineItem({
             <Text style={styles.textBase} variant="bodyMedium">
               {court}
             </Text>
-            {session === "Singles" || "Rally" ? (
-              <Text style={styles.textBase} variant="bodyMedium">
-                {opponent}
-              </Text>
-            ) : (
-              ""
-            )}
-            {session === "Doubles" ? (
-              <>
-                <Text style={styles.textBase} variant="bodyMedium">
-                  {teammate}
-                </Text>
-                <Text style={styles.textBase} variant="bodyMedium">
-                  {opponent}
-                </Text>
-                <Text style={styles.textBase} variant="bodyMedium">
-                  {opponent2}
-                </Text>
-              </>
-            ) : (
-              ""
-            )}
-
+            <Text style={styles.textBase} variant="bodyMedium">
+            {session}
+            </Text>
+            <Text style={styles.textBase} variant="bodyMedium">
+              {teammate}
+            </Text>
+            <Text style={styles.textBase} variant="bodyMedium">
+              {opponent}
+            </Text>
+            <Text style={styles.textBase} variant="bodyMedium">
+              {opponent2}
+            </Text>
             <Text style={styles.duration} variant="bodyMedium">
               {duration} hr
             </Text>

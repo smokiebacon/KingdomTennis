@@ -8,6 +8,7 @@ import { View, Text, StyleSheet, Switch } from "react-native"
 import { getDateMinusDays } from "../util/date"
 import { getAllEvents } from "../util/http"
 import Button from "../UI/Button"
+import supabase from "../supabaseClient"
 
 function Settings() {
   const eventsCtx = useContext(EventsContext)
@@ -66,8 +67,10 @@ function Settings() {
           </View>
         </View>
       </View>
-      <Button onPress={authCtx.logout}>Logout</Button>
-      {/* <Timeline events={recentEvents} eventPeriod="Last 7 Days" /> */}
+      <Button onPress={() => { 
+        supabase.auth.signOut()
+      }}>Logout</Button>
+      <Timeline events={recentEvents} eventPeriod="Last 7 Days" />
     </>
   )
 }
