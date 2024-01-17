@@ -4,10 +4,12 @@ import { Dropdown } from "react-native-element-dropdown"
 import { GlobalStyles } from "../../constants/styles"
 import { EventsContext } from "../../store/events-context"
 
-import { EventsContext } from "../../store/events-context"
 const DropdownComponent = ({ value, setValue }) => {
   const eventsCtx = useContext(EventsContext)
-  console.log("🚀 ~ file: DropdownComponent.js:9 ~ DropdownComponent ~ eventsCtx:", eventsCtx.timelinePeriod)
+  console.log(
+    "🚀 ~ file: DropdownComponent.js:9 ~ DropdownComponent ~ eventsCtx:",
+    eventsCtx.timelinePeriod
+  )
   const selectedPeriod = [
     { label: "Week", value: "Week" },
     { label: "Month", value: "Month" },

@@ -111,12 +111,12 @@ function MatchesOverView() {
 }
 function Navigation() {
   // const authCtx = useContext(AuthContext)
-  const [session, setSession] = useState<Session | null>(null);
+  const [session, setSession] = useState<Session | null>(null)
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
       console.log("🚀 ~ supabase.auth.getSession ~ session:", session)
-      SplashScreen.hideAsync();
+      SplashScreen.hideAsync()
     })
 
     supabase.auth.onAuthStateChange((_event, session) => {
@@ -148,15 +148,15 @@ function Navigation() {
 //   // if (isTryingLogin) {
 //   //   SplashScreen.hideAsync()
 //   // }
-//   return 
+//   return
 // }
 
 export default function App() {
   return (
     <>
-    <Navigation />
+      <Navigation />
       {/* <AuthContextProvider> */}
-        {/* <Root /> */}
+      {/* <Root /> */}
       {/* </AuthContextProvider> */}
     </>
   )

@@ -26,10 +26,11 @@ function TimelineSummary({ events, periodName }) {
     const chartData = Object.keys(aggregatedData).map((date) => {
       console.log("🚀 ~ chartData ~ date:", date)
       return {
-      value: aggregatedData[date],
-      label: date.slice(0, 5),
-      labelTextStyle: { color: "white", fontSize: 10 },
-    }})
+        value: aggregatedData[date],
+        label: date.slice(0, 5),
+        labelTextStyle: { color: "white", fontSize: 10 },
+      }
+    })
     return chartData
   }
   const aggregatedData = aggregateDataByDate(events)
@@ -42,14 +43,14 @@ function TimelineSummary({ events, periodName }) {
   const totalDuration = events.reduce((sum, event) => {
     return sum + event.duration
   }, 0)
-  console.log((Dimensions.get('screen').width), events.length)
+  console.log(Dimensions.get("screen").width, events.length)
   return (
     <>
       <View style={styles.container}>
         <Text style={styles.duration}>Duration {totalDuration.toFixed(2)}</Text>
         <Text>{new Date().getFullYear()}</Text>
       </View>
-      <View style={{ marginTop: 10, }}>
+      <View style={{ marginTop: 10 }}>
         <BarChart
           height={90}
           maxValue={getBiggestYAxis()}
@@ -61,7 +62,7 @@ function TimelineSummary({ events, periodName }) {
           frontColor={"pink"}
           noOfSections={3}
           yAxisTextStyle={{ color: "white" }}
-          width={Dimensions.get('screen').width - 70}
+          width={Dimensions.get("screen").width - 70}
         />
       </View>
     </>
