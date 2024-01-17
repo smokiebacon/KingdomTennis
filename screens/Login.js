@@ -12,6 +12,9 @@ function Login() {
   const [isAuthenticating, setIsAuthenticating] = useState(false)
   const authCtx = useContext(AuthContext)
 
+
+
+
   async function loginHandler({ email, password }) {
     setIsAuthenticating(true)
     try {
