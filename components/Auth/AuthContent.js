@@ -5,7 +5,19 @@ import FlatButton from "../../UI/FlatButton"
 import AuthForm from "./AuthForm"
 import { Colors } from "../../constants/styles"
 import { useNavigation } from "@react-navigation/native"
+import supabase from "../../supabaseClient"
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-google-signin/google-signin'
 function AuthContent({ isLogin, onAuthenticate }) {
+  GoogleSignin.configure({
+    scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+    webClientId: '716757080003-04kk7jn4ejhg55ilk15u1c6vm2u33m4n.apps.googleusercontent.com',
+  })
+
+
   const navigation = useNavigation()
   const [credentialsInvalid, setCredentialsInvalid] = useState({
     email: false,
@@ -63,6 +75,39 @@ function AuthContent({ isLogin, onAuthenticate }) {
         <FlatButton onPress={switchAuthModeHandler}>
           {isLogin ? "Create a new user" : "Log in instead"}
         </FlatButton>
+        <GoogleSigninButton
+      size={GoogleSigninButton.Size.Wide}
+      color={GoogleSigninButton.Color.Dark}
+      onPress={async () => {
+        try {
+          const available = await GoogleSignin.hasPlayServices()
+          console.log("🚀 ~ available:", available)
+          const userInfo = await GoogleSignin.signIn()
+          console.log("🚀 ~ onPress={ ~ userInfo:", userInfo)
+          if (userInfo.idToken) {
+            const { data, error } = await supabase.auth.signInWithIdToken({
+              provider: 'google',
+              token: userInfo.idToken,
+            })
+            console.log(error, data)
+          } else {
+            throw new Error('no ID token present!')
+          }
+        } catch (error) {
+          console.log("🚀 ~ onPress={ ~ error:", error)
+          if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+            // user cancelled the login flow
+          } else if (error.code === statusCodes.IN_PROGRESS) {
+            console.log('999999')
+            // operation (e.g. sign in) is in progress already
+          } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+            // play services not available or outdated
+          } else {
+            // some other error happened
+          }
+        }
+      }}
+    />
       </View>
     </View>
   )

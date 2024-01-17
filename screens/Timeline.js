@@ -10,6 +10,8 @@ function History() {
   const eventsCtx = useContext(EventsContext)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState()
+  const todaysDate = new Date()
+
   // const [value, setValue] = useState("Month")
   // console.log("🚀 ~ file: Timeline.js:14 ~ History ~ value:", value)
   useEffect(() => {

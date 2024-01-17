@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "kingdomTennis",
-    "slug": "tennis-diary",
+    "slug": "kingdomtennis",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -32,10 +32,26 @@
       "eas": {
         "projectId": "5b976b0a-f2f2-4c61-be72-64dd089d15fd"
       },
-    "plugins" : [
-      "@react-native-google-signin/google-signin"
-    ]
+      "plugins": []
     },
-    "owner": "smokiebacon"
+    "owner": "owais_anwar",
+    "plugins": [
+      [
+        "@react-native-google-signin/google-signin"
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 34,
+            "targetSdkVersion": 31,
+            "buildToolsVersion": "31.0.0"
+          },
+          "ios": {
+            "deploymentTarget": "14.0"
+          }
+        }
+      ]
+    ]
   }
 }

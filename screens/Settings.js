@@ -70,7 +70,7 @@ function Settings() {
       <Button onPress={() => { 
         supabase.auth.signOut()
       }}>Logout</Button>
-      <Timeline events={recentEvents} eventPeriod="Last 7 Days" />
+      {/* <Timeline events={recentEvents} eventPeriod="Last 7 Days" /> */}
     </>
   )
 }
