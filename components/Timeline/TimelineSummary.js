@@ -116,10 +116,10 @@ function TimelineSummary({ events, periodName }) {
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.duration}>Duration {eventsCtx.selectedPeriod?.value}</Text>
-        <Text>{eventsCtx.selectedPeriod.label}</Text>
+        <Text style={styles.duration}>Duration {eventsCtx?.selectedPeriod?.value}</Text>
+        <Text>{eventsCtx?.selectedPeriod?.label}</Text>
       </View>
-      <View style={{ marginTop: 10, }}>
+      <View style={{ marginTop: 10 }}>
         <BarChart
           height={90}
           maxValue={getBiggestYAxis() || 50}
@@ -148,7 +148,7 @@ function TimelineSummary({ events, periodName }) {
           labelWidth={5}
           xAxisTextNumberOfLines={2}
           yAxisTextStyle={{ color: "white" }}
-          width={Dimensions.get('screen').width - 70}
+          width={Dimensions.get("screen").width - 70}
         />
       </View>
     </>
