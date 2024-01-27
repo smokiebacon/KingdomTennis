@@ -42,15 +42,17 @@ function History() {
     setStartDatePicker(false);
   };
   const handleConfirm = (date) => {
-    eventsCtx.setGraphData([ { ...eventsCtx.graphData[0], startDate: format(date,  'yyy-MM-dd'), frontColor :'rgb(228,105,93)' , label: format(date, 'MMM, dd'), } ])
-    // console.warn("A date has been picked: ", date);
+    const previousLabel = eventsCtx.graphData[0].endDate
+    const obj = { ...eventsCtx.graphData[0], startDate: format(date,  'yyy-MM-dd'), frontColor :'rgb(228,105,93)' , label:  format(date, 'MMM, dd') + "  " + format(new Date(previousLabel), 'MMM, dd') }
+    eventsCtx.setGraphData([ obj ])
+    eventsCtx.setSelectedPeriod(obj);
     hideDatePicker();
   };
   const hideEndDatePicker = () => {
     setEndDatePicker(false);
   }
   const confirmEndDate = (date) => {
-    const newObj = { ...eventsCtx.graphData[0], endDate: format(date,  'yyy-MM-dd'), value: reduceDurations(eventsCtx.graphData[0].startDate, format(date,  'yyy-MM-dd')), label: eventsCtx.graphData[0].label + " " + format(date, 'MMM, dd')  }
+    const newObj = { ...eventsCtx.graphData[0], endDate: format(date,  'yyy-MM-dd'), value: reduceDurations(eventsCtx.graphData[0].startDate, format(date,  'yyy-MM-dd')), label: format(new Date(eventsCtx.graphData[0].startDate), 'MMM, dd') + " " + format(date, 'MMM, dd')  }
     eventsCtx.setGraphData([ newObj ])
     hideEndDatePicker();
     eventsCtx.setSelectedPeriod(newObj)

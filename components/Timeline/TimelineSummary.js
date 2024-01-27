@@ -90,7 +90,7 @@ function TimelineSummary({ events, periodName }) {
           eventsCtx.setGraphData(years);
           break;
           default:
-            const obj = { label : `${format(new Date(),'E')}`, startDate: format(new Date() , dateformat), endDate: format(new Date(), dateformat), value: 0, frontColor: 'rgb(228,105,93)',   labelTextStyle: { color: "white", fontSize: 10, }, }
+            const obj = { label : `${format(new Date(),'MMM, dd')} ${format(new Date(),'MMM, dd')}`, startDate: format(new Date() , dateformat), endDate: format(new Date(), dateformat), value: 0, frontColor: 'rgb(228,105,93)',   labelTextStyle: { color: "white", fontSize: 10, }, }
             eventsCtx.setGraphData([obj]);
             eventsCtx.setSelectedPeriod(obj);
             break
