@@ -5,7 +5,6 @@ import { GlobalStyles } from "../../constants/styles"
 import { Divider } from "react-native-paper"
 
 function Timeline({ events, eventPeriod }) {
-  // console.log("🚀 ~ file: Timeline.js:8 ~ Timeline ~ eventPeriod:", eventPeriod)
   return (
     <View style={styles.container}>
       <TimelineSummary events={events} periodName={eventPeriod} />

@@ -3,7 +3,7 @@ import supabase from "../supabaseClient"
 const KEY = "AIzaSyAVyOfZKwdQqbgJJe19gZJeG0BLislk3vo"
 
 async function authenticate(mode, email, password) {
-  console.log("🚀 ~ authenticate ~ mode:", mode)
+  
   const url = `https://identitytoolkit.googleapis.com/v1/accounts:${mode}?key=${KEY}`
 
   const response = await axios.post(url, {

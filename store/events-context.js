@@ -1,5 +1,5 @@
 import { createContext, useReducer, useState } from "react"
-
+import {  startOfMonth, format }  from 'date-fns'
 export const EventsContext = createContext({
   events: [],
   addEvent: ({
@@ -18,6 +18,14 @@ export const EventsContext = createContext({
     id,
     { notes, duration, date, court, teammate, opponent, opponent2, session }
   ) => {},
+  timelinePeriod : "Month",
+  setTimeLinePeriod : (period) => {},
+  setSelectedDate : (date) => {},
+  selectedDate: null,
+  setSelectedPeriod : (obj) => {},
+  selectedPeriod : null,
+  graphData: [],
+  setGraphData : (graphData) => {},
 })
 
 function eventsReducer(state, action) {
@@ -45,9 +53,12 @@ function eventsReducer(state, action) {
 
 function EventsContextProvider({ children }) {
   const [eventsState, dispatch] = useReducer(eventsReducer, [])
-  const [timelinePeriod, setTimeLinePeriod] = useState('Month')
+  const [timelinePeriod, setTimeLinePeriod] = useState('Month');
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedPeriod, setSelectedPeriod] = useState(null)
+  const [graphData, setGraphData] =  useState([]);
   function addEvent(eventData) {
-    // console.log("🚀 ~ file: events-context.js:50 ~ addEvent ~ eventData:", eventData)
+
     dispatch({ type: "ADD", payload: eventData })
   }
   function setEvents(events) {
@@ -69,6 +80,12 @@ function EventsContextProvider({ children }) {
     editEvent: editEvent,
     timelinePeriod: timelinePeriod,
     setTimeLinePeriod,
+    selectedDate: selectedDate,
+    setSelectedDate,
+    selectedPeriod,
+    setSelectedPeriod,
+    graphData,
+    setGraphData
   }
 
   return (

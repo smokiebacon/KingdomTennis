@@ -6,6 +6,7 @@ import { Picker } from "@react-native-picker/picker"
 
 import { format, subDays } from "date-fns"
 import { getFormattedDate } from "../../util/date"
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import DateTimePicker, { AndroidNativeProps, IOSNativeProps,  } from "@react-native-community/datetimepicker"
 function EventForm({ onSubmit, isEditting, defaultValues }) {
@@ -23,7 +24,26 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
   const [showPicker, setShowPicker] = useState(false);
   const [mode, setMode] = useState<any>("date");
   const [date, setDate] = useState(new Date());
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const showTimePicker = () => {
+    setDatePickerVisibility(true);
+  };
 
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    // console.warn("A date has been picked: ", date);
+    const minutes = date.getMinutes() + date.getHours() * 60;
+    console.log(minutes);
+    setInputValues({
+      ...inputValues,
+      duration: minutes,
+    })
+
+    hideDatePicker();
+  };
   const showMode = (currentMode) => {
     setShowPicker(true)
     setMode(currentMode)
@@ -81,24 +101,9 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
   }
   function submitHandler() {
     
-    const durationRegularExpression = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/;
-    const isValid = durationRegularExpression.test(inputValues.duration);
-    if(!isValid) {
-        return
-    }
-    console.log(typeof inputValues.duration)
-    const hoursMins = inputValues.duration.split(':')
-    console.log("🚀 ~ file: EventForm.js:84 ~ submitHandler ~ hours:", hoursMins)
-    const hour = parseInt(hoursMins[0]);
-    console.log("🚀 ~ file: EventForm.js:86 ~ submitHandler ~ hour:", hour)
-    const convertHoursToMinutes = hour * 60;
-    console.log("🚀 ~ file: EventForm.js:88 ~ submitHandler ~ convertHoursToMinutes:", convertHoursToMinutes)
-    
-    
-    
     const eventData = {
       notes: inputValues.notes,
-      duration: convertHoursToMinutes + parseInt(hoursMins[1]),
+      duration: inputValues.duration,
       date: date.toLocaleDateString(), //should be an Object in DatePicker but Supabase wants as a string
       court: inputValues.court,
       teammate: inputValues.teammate,
@@ -112,7 +117,7 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
     // if (!durationIsValid) {
     //   return
     // }
-    // onSubmit(eventData)
+    onSubmit(eventData)
   }
   return (
     <View>
@@ -124,6 +129,16 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
           onChange={onDateChange}
         />
       ) : null}
+         <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        // mode="date"
+        locale="en_GB"
+        mode='time'
+        date={new Date(new Date().setHours(0, 0, 0, 0))}
+        is24Hour
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+      />
       {/* <Text>{inputValues.date}</Text> */}
       <TextInput
         value={date.toLocaleDateString()}
@@ -152,11 +167,19 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
         onChangeText={inputChange.bind(this, "court")}
       />
       <TextInput
+       left={
+          <TextInput.Icon
+            icon="calendar"
+            forceTextInputFocus={false}
+            onPress={showTimePicker}
+          />
+        }
         label="Duration"
-        value={inputValues.duration}
-        placeholder="Hours and Minutes like this '1:30'"
+        value={`${inputValues.duration}`}
+        placeholder="Hours and Minutes"
         // keyboardType="decimal-pad"
         onChangeText={inputChange.bind(this, "duration")}
+        
       />
       <Picker
         itemStyle={{

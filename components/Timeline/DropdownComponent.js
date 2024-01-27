@@ -3,19 +3,22 @@ import { StyleSheet, Text, View } from "react-native"
 import { Dropdown } from "react-native-element-dropdown"
 import { GlobalStyles } from "../../constants/styles"
 import { EventsContext } from "../../store/events-context"
-
+import { startOfMonth, startOfYear, startOfWeek, format, subDays } from 'date-fns'
 // import { EventsContext } from "../../store/events-context"
 const DropdownComponent = ({ value, setValue }) => {
   const eventsCtx = useContext(EventsContext)
-  console.log("🚀 ~ file: DropdownComponent.js:9 ~ DropdownComponent ~ eventsCtx:", eventsCtx.timelinePeriod)
+  
+  const todaysDate = new Date()
   const selectedPeriod = [
-    { label: "Week", value: "Week" },
+    { label: "Week", value:  'Week' },
     { label: "Month", value: "Month" },
+    // { label: "Year", value: format(startOfYear(todaysDate), 'yyyy-MM-dd') },
     { label: "Year", value: "Year" },
+    { label: "Custom", value: "Custom" },
   ]
 
-  // const [value, setValue] = useState("Month")
-  // console.log("🚀 ~ file: DropdownComponent.js:14 ~ DropdownComponent ~ value:", value)
+  
+  
   const [isFocus, setIsFocus] = useState(false)
 
   const renderLabel = () => {
@@ -43,6 +46,7 @@ const DropdownComponent = ({ value, setValue }) => {
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={(item) => {
+          
           eventsCtx.setTimeLinePeriod(item.value)
           setIsFocus(false)
         }}

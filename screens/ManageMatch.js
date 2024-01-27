@@ -67,16 +67,17 @@ function ManageMatch({ route, navigation }) {
   }
 
   async function confirmHandler(eventData) {
-    setIsLoading(true)
+    // setIsLoading(true)
     try {
       if (isEditting) {
-        eventCtx.editEvent(editedMatchId, eventData)
-        await updateEvent(editedMatchId, eventData)
+        console.log(eventData, 'line 73');
+        // eventCtx.editEvent(editedMatchId, eventData)
+        // await updateEvent(editedMatchId, eventData)
       } else {
         const id = await storeEvent(eventData)
         eventCtx.addEvent({ ...eventData, id: id })
       }
-      navigation.goBack()
+      // navigation.goBack()
     } catch (error) {
       setError("Could not save data - please try again")
       setIsLoading(false)

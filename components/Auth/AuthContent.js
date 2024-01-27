@@ -38,13 +38,13 @@ function AuthContent({ isLogin, onAuthenticate }) {
     let { email, confirmEmail, password, confirmPassword } = credentials
 
     email = email.trim()
-    console.log("🚀 ~ submitHandler ~ email:", email)
+    
     password = password.trim()
 
     const emailIsValid = email.includes("@")
     const passwordIsValid = password.length > 6
     const emailsAreEqual = email === confirmEmail
-    console.log("🚀 ~ submitHandler ~ emailsAreEqual:", emailsAreEqual)
+    
     const passwordsAreEqual = password === confirmPassword
 
     if (
@@ -81,9 +81,9 @@ function AuthContent({ isLogin, onAuthenticate }) {
       onPress={async () => {
         try {
           const available = await GoogleSignin.hasPlayServices()
-          console.log("🚀 ~ available:", available)
+          
           const userInfo = await GoogleSignin.signIn()
-          console.log("🚀 ~ onPress={ ~ userInfo:", userInfo)
+          
           if (userInfo.idToken) {
             const { data, error } = await supabase.auth.signInWithIdToken({
               provider: 'google',
@@ -94,7 +94,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
             throw new Error('no ID token present!')
           }
         } catch (error) {
-          console.log("🚀 ~ onPress={ ~ error:", error)
+          
           if (error.code === statusCodes.SIGN_IN_CANCELLED) {
             // user cancelled the login flow
           } else if (error.code === statusCodes.IN_PROGRESS) {

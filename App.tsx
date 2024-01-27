@@ -18,7 +18,8 @@ import EventsContextProvider from "./store/events-context"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Session } from "@supabase/supabase-js"
 import supabase from "./supabaseClient"
-
+import {GestureHandlerRootView } from 'react-native-gesture-handler';
+// import GestureHandlerRootView from "react-native-gesture-handler"
 const Stack = createNativeStackNavigator()
 const BottomTabs = createBottomTabNavigator()
 
@@ -153,12 +154,12 @@ function Navigation() {
 
 export default function App() {
   return (
-    <>
+    <GestureHandlerRootView style={{ flex: 1 }} >
     <Navigation />
       {/* <AuthContextProvider> */}
         {/* <Root /> */}
       {/* </AuthContextProvider> */}
-    </>
+    </GestureHandlerRootView>
   )
 }
 
