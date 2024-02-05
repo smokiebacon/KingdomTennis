@@ -5,14 +5,15 @@ import AuthContent from "../components/Auth/AuthContent"
 import { loginUser } from "../util/auth"
 import { AuthContext } from "../store/auth-context"
 import supabase from "../supabaseClient"
+import { useTranslation } from "react-i18next"
 
 
 
 function Login() {
-  const [isAuthenticating, setIsAuthenticating] = useState(false)
+  const [isAuthenticating, setIsAuthenticating] = useState<Boolean>(false)
   const authCtx = useContext(AuthContext)
 
-
+  const { t } = useTranslation()
 
 
   async function loginHandler({ email, password }) {
@@ -22,11 +23,11 @@ function Login() {
         email : email,
         password: password,
       })
-      console.log(error, data, 'line 19');
+      // console.log(error, data, 'line 19');
       // const token = await loginUser(email, password)
       // authCtx.authenticate(token)
     } catch (error) {
-      Alert.alert("Login failed")
+      // Alert.alert("Login failed")
       console.log(error)
     }
     setIsAuthenticating(false)

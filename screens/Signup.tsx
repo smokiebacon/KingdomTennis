@@ -36,7 +36,7 @@ function Signup({  navigation }) {
     return <LoadingOverlay />
   }
 
-  return <AuthContent onAuthenticate={signupHandler} />
+  return <AuthContent isLogin={false} onAuthenticate={signupHandler} />
 }
 
 export default Signup

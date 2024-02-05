@@ -1,8 +1,9 @@
-import { Pressable, View, Text, StyleSheet, ScrollView } from "react-native"
+import { Pressable, View, StyleSheet, ScrollView } from "react-native"
 import { GlobalStyles } from "../../constants/styles"
-import { Card } from "react-native-paper"
+import { Card, Text } from "react-native-paper"
 import { getFormattedDate } from "../../util/date"
 import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 function TimelineItem({
   id,
   notes,
@@ -14,7 +15,7 @@ function TimelineItem({
   opponent2,
   session,
 }) {
-  const navigation = useNavigation()
+  const navigation = useNavigation<NativeStackNavigationProp<{ "Edit Event" : {},   }>>()
 
   function timelinePressHandler() {
     navigation.navigate("Edit Event", {
@@ -25,7 +26,7 @@ function TimelineItem({
     <Pressable
       onPress={timelinePressHandler}
       style={({ pressed }) => pressed && styles.pressed}
-      android_ripple
+      // android_ripple
     >
       <ScrollView>
         <Card style={styles.item}>

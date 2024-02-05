@@ -3,13 +3,14 @@ import { StyleSheet, View } from "react-native"
 
 import Button from "../../UI/Button"
 import Input from "./Input"
+import { useTranslation } from "react-i18next"
 
 function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
   const [enteredEmail, setEnteredEmail] = useState("")
   const [enteredConfirmEmail, setEnteredConfirmEmail] = useState("")
   const [enteredPassword, setEnteredPassword] = useState("")
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("")
-
+  const { t } = useTranslation()
   const {
     email: emailIsInvalid,
     confirmEmail: emailsDontMatch,
@@ -48,7 +49,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
       <View>
         <Input
           secure={false}
-          label="Email Address"
+          label={t('email_address')}
           onUpdateValue={updateInputValueHandler.bind(this, "email")}
           value={enteredEmail}
           keyboardType="email-address"
@@ -57,7 +58,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         {!isLogin && (
           <Input
             secure={false}
-            label="Confirm Email Address"
+            label={t('confirm_email_address')}
             onUpdateValue={updateInputValueHandler.bind(this, "confirmEmail")}
             value={enteredConfirmEmail}
             keyboardType="email-address"
@@ -66,7 +67,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         )}
         <Input
         keyboardType="default"
-          label="Password"
+          label={t('password')}
           onUpdateValue={updateInputValueHandler.bind(this, "password")}
           secure
           value={enteredPassword}
@@ -75,7 +76,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         {!isLogin && (
           <Input
           keyboardType="default"
-            label="Confirm Password"
+            label={t('confirm_password')}
             onUpdateValue={updateInputValueHandler.bind(
               this,
               "confirmPassword"
@@ -87,7 +88,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         )}
         <View style={styles.buttons}>
           <Button onPress={submitHandler}>
-            {isLogin ? "Log In" : "Sign Up"}
+            {isLogin ? t('login') : t("signup")}
           </Button>
         </View>
       </View>

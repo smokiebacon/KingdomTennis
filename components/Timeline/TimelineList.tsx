@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet, View, Text } from "react-native"
 import TimelineItem from "./TimelineItem"
 import { EventsContext } from "../../store/events-context"
-import { useContext, useEffect, useRef, useState } from "react"
+import {  useContext, useEffect, useRef, useState } from "react"
 import { Swipeable } from "react-native-gesture-handler"
 
 function renderTimelineItem(itemData) {
@@ -10,20 +10,20 @@ function renderTimelineItem(itemData) {
 function TimelineList({ events }) {
   const eventsCtx = useContext(EventsContext);
   const [filteredEvents, setFilteredEvents] = useState(events);
-  const scrollRef = useRef();
+  const scrollRef = useRef<Swipeable>();
 
   useEffect(() => {
     
-    if(eventsCtx.selectedPeriod) {
+    if(eventsCtx?.selectedPeriod) {  
       const newEvents = events?.filter((item) => {
         const currentDate = item?.date;
         const { startDate, endDate } = eventsCtx.selectedPeriod
         return (currentDate >= startDate && currentDate <= endDate)
       })
       setFilteredEvents(newEvents);
+    }else {
     }
-  },[eventsCtx.selectedPeriod])
-  
+  },[eventsCtx.selectedPeriod, events])
   return (
     <View style={{ flex: 1, }}>
    <Swipeable 
@@ -47,7 +47,9 @@ function TimelineList({ events }) {
         
         if(direction === 'left') {
           if(index === 0 || index === -1) {
-              scrollRef.current.close();
+            if(scrollRef.current) {
+              scrollRef?.current?.close();  
+            }
               return;
           }else { 
         

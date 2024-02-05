@@ -12,7 +12,7 @@ import { GlobalStyles } from "../constants/styles"
 function History() {
   const eventsCtx = useContext(EventsContext)
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState()
+  const [error, setError] = useState<string>()
   const todaysDate = new Date()
 
   // const [value, setValue] = useState("Month")
@@ -27,10 +27,13 @@ function History() {
       setIsLoading(true)
       eventsCtx.setSelectedDate(null)
       try {
-        const events = await getEvents(eventsCtx.timelinePeriod)
+        const events = await getEvents()
         eventsCtx.setEvents(events)
-        eventsCtx.setSelectedDate(events[0].date);
+        if(events?.length) {
+          eventsCtx.setSelectedDate(events[0].date);
+        }
       } catch (error) {
+        console.log("🚀 ~ fetchEvents ~ error:", error)
         setError("Could not get events")
       }
       setIsLoading(false)
@@ -94,10 +97,7 @@ function History() {
       <DropdownComponent />
       {
         eventsCtx.timelinePeriod === 'Custom' ?
-
-      
       <View style={{ flexDirection: 'row', justifyContent: 'space-evenly',  backgroundColor: GlobalStyles.colors.gray500, }}>
-        
       <TouchableOpacity onPress={() => {  setStartDatePicker(true) }}>
         <Text style={{ color: '#fff' }}>{format(new Date(eventsCtx?.graphData[0].startDate), 'MMMM, dd')}</Text>
       </TouchableOpacity>

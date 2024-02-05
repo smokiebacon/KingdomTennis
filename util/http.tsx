@@ -15,10 +15,12 @@ export async function storeEvent(eventData) {
   return id
 }
 
-export async function getEvents(date) {
-  const { data, error } = await supabase.from("Events").select()
+export async function getEvents() {
+  const user_id = (await supabase.auth.getSession()).data.session.user.id;
+  console.log("🚀 ~ getEvents ~ user_id:", user_id)
+  const { data, error } = await supabase.from("Events").select().eq('user_id', user_id);
   console.log("🚀 ~ file: http.js:20 ~ getEvents ~ data:", data)
-  return data
+  return data || []
 }
 
 // export async function getAllEvents() {

@@ -4,17 +4,18 @@ import { Dropdown } from "react-native-element-dropdown"
 import { GlobalStyles } from "../../constants/styles"
 import { EventsContext } from "../../store/events-context"
 import { startOfMonth, startOfYear, startOfWeek, format, subDays } from 'date-fns'
+import { useTranslation } from "react-i18next"
 // import { EventsContext } from "../../store/events-context"
-const DropdownComponent = ({ value, setValue }) => {
+const DropdownComponent = () => {
   const eventsCtx = useContext(EventsContext)
-  
+  const  { t }  = useTranslation()
   const todaysDate = new Date()
   const selectedPeriod = [
-    { label: "Week", value:  'Week' },
-    { label: "Month", value: "Month" },
+    { label: t('week'), value:  'Week' },
+    { label: t('month'), value: "Month" },
     // { label: "Year", value: format(startOfYear(todaysDate), 'yyyy-MM-dd') },
-    { label: "Year", value: "Year" },
-    { label: "Custom", value: "Custom" },
+    { label: t('year'), value: "Year" },
+    { label: t('custom'), value: "Custom" },
   ]
 
   
@@ -22,8 +23,8 @@ const DropdownComponent = ({ value, setValue }) => {
   const [isFocus, setIsFocus] = useState(false)
 
   const renderLabel = () => {
-    if (value || isFocus) {
-      return <Text style={styles.label}>Time Period</Text>
+    if (eventsCtx.selectedPeriod || isFocus) {
+      return <Text style={styles.label}>{t('time_period')}</Text>
     }
     return null
   }
@@ -35,7 +36,7 @@ const DropdownComponent = ({ value, setValue }) => {
         style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
-        iconStyle={styles.iconStyle}
+        // iconStyle={styles.iconStyle}
         activeColor="green"
         data={selectedPeriod}
         maxHeight={300}

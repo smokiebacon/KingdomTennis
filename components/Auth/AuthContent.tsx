@@ -11,14 +11,15 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin'
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { useTranslation } from "react-i18next"
 function AuthContent({ isLogin, onAuthenticate }) {
+  const {t} = useTranslation()
   GoogleSignin.configure({
     scopes: ['https://www.googleapis.com/auth/drive.readonly'],
     webClientId: '716757080003-04kk7jn4ejhg55ilk15u1c6vm2u33m4n.apps.googleusercontent.com',
   })
-
-
-  const navigation = useNavigation()
+  const navigation = useNavigation<NativeStackNavigationProp<{ Signup : {},Login : {} }>>()
   const [credentialsInvalid, setCredentialsInvalid] = useState({
     email: false,
     password: false,
@@ -73,7 +74,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
       />
       <View style={styles.buttons}>
         <FlatButton onPress={switchAuthModeHandler}>
-          {isLogin ? "Create a new user" : "Log in instead"}
+          {isLogin ? t('create_new_user') : t('login_instead')}
         </FlatButton>
         <GoogleSigninButton
       size={GoogleSigninButton.Size.Wide}

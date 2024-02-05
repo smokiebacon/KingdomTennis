@@ -5,8 +5,10 @@ import { getShortenedFormattedDate } from "../../util/date"
 import { useContext, useEffect, useState } from "react"
 import { EventsContext } from "../../store/events-context"
 import { endOfMonth, endOfWeek, endOfYear, format, startOfMonth, startOfWeek, startOfYear, subMonths, subWeeks, subYears, isAfter, isBefore, isEqual } from "date-fns"
+import { useTranslation } from "react-i18next"
 
 function TimelineSummary({ events, periodName }) {
+  const { t } = useTranslation()
   const eventsCtx = useContext(EventsContext)
   const reduceDurations = (startDate, endDate) => {
   const reduce = events?.reduce((accum, current) => {
@@ -48,7 +50,7 @@ function TimelineSummary({ events, periodName }) {
         break;
         case 'Week' :
           let weeks = [];
-          for (let i = 6; i>0; i--) {
+          for (let i = 6; i>=0; i--) {
             let start = subWeeks(currentDate, i)
             
             let obj = {
@@ -57,11 +59,12 @@ function TimelineSummary({ events, periodName }) {
               endDate : format(endOfWeek(start),dateformat),
               value : reduceDurations(format(startOfWeek(start),dateformat), format(endOfWeek(start),dateformat)),
               currentDate : start,
-              frontColor: i == 1 ?'rgb(228,105,93)' :  'pink',
+              frontColor: i == 0 ?'rgb(228,105,93)' :  'pink',
               labelTextStyle: { color: "white", fontSize: 10 },
             }
             weeks.push(obj);
-            if(i==1) {
+            if(i==0) {
+              console.log('hereee')
               eventsCtx.setSelectedPeriod(obj)
             }
           }
@@ -101,7 +104,7 @@ function TimelineSummary({ events, periodName }) {
 
   useEffect(() => {
         getAggregateData(eventsCtx.timelinePeriod);
-  },[eventsCtx.timelinePeriod])
+  },[eventsCtx.timelinePeriod, eventsCtx.events]);
   function getBiggestYAxis() {
     
     const maxYAxisChartNumber =  eventsCtx.graphData.map((item) => item.value);
@@ -116,7 +119,7 @@ function TimelineSummary({ events, periodName }) {
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.duration}>Duration {eventsCtx?.selectedPeriod?.value}</Text>
+        <Text style={styles.duration}>{t('duration')} {eventsCtx?.selectedPeriod?.value}</Text>
         <Text>{eventsCtx?.selectedPeriod?.label}</Text>
       </View>
       <View style={{ marginTop: 10 }}>
@@ -126,7 +129,7 @@ function TimelineSummary({ events, periodName }) {
           data={eventsCtx.graphData}
           spacing={40}
           barWidth={25}
-          bar
+          // bar
           onPress={(value) => {
             eventsCtx.setSelectedPeriod(value)
             const mapped = eventsCtx.graphData?.map(item => {

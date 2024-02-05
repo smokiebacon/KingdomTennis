@@ -36,14 +36,14 @@ function eventsReducer(state, action) {
       const inverted = action.payload
       return inverted
     case "UPDATE":
-      const updatedEventIndex = state.findIndex(
-        (event) => event.id === action.payload.id
-      )
-      const updatedEvent = state[updatedEventIndex]
-      const updatedItem = { ...updatedEvent, ...action.payload.data }
-      const updatedEvents = [...state]
-      updatedEvents[updatedEventIndex] = updatedItem
-      return updatedEvents
+      console.log(state)
+      const mapped = state.map(item => {
+        if(item.id === action?.payload.id) {
+          return {...action.payload.data, id: action?.payload?.id}
+        } else return item;
+      })
+      console.log(mapped, 'mapppeddddd')
+      return [...mapped];
     case "DELETE":
       return state.filter((event) => event.id !== action.payload)
     default:
@@ -53,6 +53,7 @@ function eventsReducer(state, action) {
 
 function EventsContextProvider({ children }) {
   const [eventsState, dispatch] = useReducer(eventsReducer, [])
+  console.log("🚀 ~ EventsContextProvider ~ eventsState:", eventsState)
   const [timelinePeriod, setTimeLinePeriod] = useState('Month');
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedPeriod, setSelectedPeriod] = useState(null)

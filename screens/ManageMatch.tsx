@@ -22,18 +22,20 @@ function ManageMatch({ route, navigation }) {
   const editedMatchId = route.params?.eventId
   const isEditting = !!editedMatchId //true or false if edit match id exists; !!trasnfer into a boolean
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState()
+  const [error, setError] = useState<string>('')
 
   async function deleteEvent() {
     setIsLoading(true)
     try {
+
       eventCtx.deleteEvent(editedMatchId)
       await deleteEventBackend(editedMatchId)
-      console.log(editedMatchId, "from ManageMatch frontend edit")
       navigation.goBack()
     } catch (error) {
       setError("Could not delete event.")
-      setIsLoading(true)
+      
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -67,19 +69,21 @@ function ManageMatch({ route, navigation }) {
   }
 
   async function confirmHandler(eventData) {
-    // setIsLoading(true)
+    setIsLoading(true)
     try {
       if (isEditting) {
-        console.log(eventData, 'line 73');
-        // eventCtx.editEvent(editedMatchId, eventData)
-        // await updateEvent(editedMatchId, eventData)
+        console.log(eventData, 'line 73', editedMatchId);
+        eventCtx.editEvent(editedMatchId, eventData)
+        await updateEvent(editedMatchId, eventData)
       } else {
         const id = await storeEvent(eventData)
         eventCtx.addEvent({ ...eventData, id: id })
       }
-      // navigation.goBack()
+      navigation.goBack()
     } catch (error) {
       setError("Could not save data - please try again")
+    }
+    finally {
       setIsLoading(false)
     }
   }
