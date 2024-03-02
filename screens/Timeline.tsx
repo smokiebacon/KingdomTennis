@@ -9,7 +9,11 @@ import { startOfWeek, startOfMonth, startOfYear, format,  } from 'date-fns'
 import { TouchableOpacity, View, Text} from "react-native"
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { GlobalStyles } from "../constants/styles"
-function History() {
+import ActionButton from 'react-native-action-button';
+import { useColorTheme } from "../constants/theme"
+
+function History({ navigation }) {
+  const { colors } = useColorTheme()
   const eventsCtx = useContext(EventsContext)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string>()
@@ -108,6 +112,11 @@ function History() {
       : null
       }
       <Timeline events={eventsCtx.events} eventPeriod={eventsCtx.timelinePeriod} />
+      <ActionButton buttonColor={colors.primary} onPress={() => {
+        navigation.navigate("Edit Event")
+      }} >
+
+      </ActionButton>
     </>
   )
 }

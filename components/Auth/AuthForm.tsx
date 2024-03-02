@@ -19,6 +19,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
   } = credentialsInvalid
 
   function updateInputValueHandler(inputType, enteredValue) {
+    console.log(inputType, enteredValue);
     switch (inputType) {
       case "email":
         setEnteredEmail(enteredValue)
@@ -31,7 +32,9 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         break
       case "confirmPassword":
         setEnteredConfirmPassword(enteredValue)
-        break
+        break;
+      default:
+          break;
     }
   }
 

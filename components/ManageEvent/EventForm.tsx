@@ -3,7 +3,7 @@ import { View, Pressable, StyleSheet, TouchableOpacity } from "react-native"
 import { useState } from "react"
 import Button from "../../UI/Button"
 import { Picker } from "@react-native-picker/picker"
-import { FormControl, Icon, Input, InputGroup, InputLeftAddon, InputRightAddon, Text} from 'native-base'
+import { Box, FormControl, Icon, Input, InputGroup, InputLeftAddon, InputRightAddon, Text} from 'native-base'
 import { useFormik } from 'formik'
 // import * as Yup from 'yup';
 import { format, subDays } from "date-fns"
@@ -19,6 +19,8 @@ import * as Yup from 'yup';
 import CustomIcon from "../common/Icon"
 import { BaseStyle } from "../../constants/styles"
 import { useEventForm } from "../../store/eventForm-context"
+import { Actionsheet, useDisclose } from "native-base";
+import { SelectCategory } from "./SelectCategory"
 
 
 function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
@@ -82,6 +84,11 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
     setMode(currentMode)
   }
 
+  const {
+    isOpen,
+    onOpen,
+    onClose
+  } = useDisclose();
   const showDatepicker = () => {
     showMode("date")
   }
@@ -196,6 +203,30 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
           }}
           textAlignVertical={'top'}
            />
+           <TouchableOpacity onPress={onOpen} style={[BaseStyle.textInput,{ height: 55, backgroundColor: colors.card, width: 150,}]}>
+            <CustomText>Select Category</CustomText>
+           </TouchableOpacity>
+           <Actionsheet isOpen={isOpen} onClose={onClose} >
+            <Actionsheet.Content backgroundColor={colors.background}>
+            <Box w="100%" h={60} px={4} justifyContent="center">
+            <CustomText>
+              Select Category
+            </CustomText>
+            
+          </Box>
+          <Box w={"100%"} display={'flex'} flexDirection={"row"} flexWrap={"wrap"} >
+            <SelectCategory label="Rally" onPress={() => {
+              console.log("pressed")
+            }} />
+            <SelectCategory label="Rally" onPress={() => {
+              console.log("pressed")
+            }} />
+            <SelectCategory label="Rally" onPress={() => {
+              console.log("pressed")
+            }} />
+          </Box>
+            </Actionsheet.Content>
+           </Actionsheet>
       {/* <TextInput
        left={
           <TextInput.Icon
@@ -211,7 +242,7 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
         onChangeText={inputChange.bind(this, "duration")}
         
       /> */}
-      <Picker
+      {/* <Picker
       style={{
         backgroundColor: colors.card
       }}
@@ -225,7 +256,7 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
         <Picker.Item label="Doubles" value="Doubles" />
         <Picker.Item label="Rally" value="Rally" />
         <Picker.Item label="Match" value="Match" />
-      </Picker>
+      </Picker> */}
       {inputValues.session === "Doubles" ? (
         <>
           <TextInput
