@@ -1,6 +1,6 @@
-import { TextInput, ToggleButton, useTheme } from "react-native-paper"
-import { View, Pressable, StyleSheet, TouchableOpacity } from "react-native"
-import { useState } from "react"
+import { Avatar, TextInput, ToggleButton, useTheme } from "react-native-paper"
+import { View, Pressable, StyleSheet, TouchableOpacity, ScrollView } from "react-native"
+import { useEffect, useState } from "react"
 import Button from "../../UI/Button"
 import { Picker } from "@react-native-picker/picker"
 import { Box, FormControl, Icon, Input, InputGroup, InputLeftAddon, InputRightAddon, Text } from 'native-base'
@@ -17,15 +17,13 @@ import CustomTextInput from "./TextInput"
 import CustomText from "../common/Text"
 import * as Yup from 'yup';
 import CustomIcon from "../common/Icon"
-import { BaseStyle } from "../../constants/styles"
+import { BaseColor, BaseStyle } from "../../constants/styles"
 import { useEventForm } from "../../store/eventForm-context"
 import { Actionsheet, useDisclose } from "native-base";
 import { SelectCategory } from "./SelectCategory"
 
 
 function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
-
-
   const initialValues = {
     date: null,
 
@@ -64,7 +62,16 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
   const showTimePicker = () => {
     setDatePickerVisibility(true);
   };
+  const [user, setUser ] = useState(null);
 
+
+
+  useEffect(() => {
+    supabase.auth.getSession().then(res => {
+        // console.log("res", res.data.session.user.user_metadata);
+        setUser(res?.data?.session?.user?.user_metadata);
+    })
+  },[])
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
@@ -134,6 +141,9 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
     onSubmit(eventData)
   }
   return (
+    <ScrollView>
+
+    
     <View style={{ paddingHorizontal: 10, }}>
       {showPicker ? (
         <DateTimePicker
@@ -248,6 +258,18 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
           </TouchableOpacity>
         </View>
       </View>
+
+      {/* Your Team */}
+
+      <View>
+      <CustomText variant={"titleMedium"}>Your Team</CustomText>
+      <View style={[style.teamPlayersContainer]}>
+            <View style={[style.teamPlayer]}>
+              <Avatar.Text size={40} label={user?.name[0]} style={{ backgroundColor: BaseColor.orangeColor }} ></Avatar.Text>
+              <CustomText variant={"titleMedium"}>{user?.name}</CustomText>
+            </View>
+      </View>
+      </View>
       {/* <TextInput
        left={
           <TextInput.Icon
@@ -328,12 +350,15 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
         {isEditting ? "Save Changes" : "Add Event"}
       </Button>
     </View>
+    </ScrollView>
   )
 }
 
 
 const style = StyleSheet.create({
   playerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 10, },
-  selectPlayerNo: { paddingVertical: 10, paddingHorizontal: 20, height: 45, justifyContent: 'center' }
+  selectPlayerNo: { paddingVertical: 10, paddingHorizontal: 20, height: 45, justifyContent: 'center' },
+  teamPlayersContainer : {  marginTop: 10, },
+  teamPlayer: { flexDirection: 'row', alignItems: 'center', gap: 10 }
 })
 export default EventForm
