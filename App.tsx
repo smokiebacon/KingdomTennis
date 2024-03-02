@@ -16,6 +16,7 @@ import { Divider, FAB, IconButton } from "react-native-paper"
 import * as SplashScreen from "expo-splash-screen"
 import AuthContextProvider from "./store/auth-context"
 import EventsContextProvider from "./store/events-context"
+import EventFormProvider from "./store/eventForm-context"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Session } from "@supabase/supabase-js"
 import supabase from "./supabaseClient"
@@ -29,7 +30,12 @@ import { initReactI18next, useTranslation } from 'react-i18next'
 import { languages, defaultLanguage } from "./languages"
 import { LanguageProvider, useLanguage } from "./languages/LanguageContext"
 import ChangeLanguage from "./components/Setting/ChangeLanguage"
-
+import SelectPlayer from "./screens/SelectPlayer"
+import AddPlayerForm from "./components/ManageEvent/AddPlayerForm"
+import SelectCourtForm from "./components/ManageEvent/SelectCourtLocation"
+import AddCourtForm from "./components/ManageEvent/AddNewCourt"
+import AllCourts from "./screens/AllCourts"
+import SelectPlayerModal from "./components/ManageEvent/SelectPlayerModal"
 function AuthStack() {
   const { t } = useTranslation()
   return (
@@ -56,6 +62,7 @@ function KingdomTennis() {
   const { t } = useTranslation();
   return (
     <EventsContextProvider>
+      <EventFormProvider>
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
@@ -75,7 +82,61 @@ function KingdomTennis() {
               presentation: "modal",
             }}
           />
+          <Stack.Screen
+            name="SelectPlayer"
+            component={SelectPlayer}
+            options={{
+              title  : t('select_player')
+            }}
+          />
+           <Stack.Screen
+            name="AllCourts"
+            component={AllCourts}
+            options={{
+              title  : t('all_courts')
+            }}
+          />
            <Stack.Screen name='ChangeLanguage' component={ChangeLanguage} 
+          options={{
+            presentation: 'transparentModal',
+            headerShown: false,
+            contentStyle: {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)'
+            }
+
+          }}
+      />
+       <Stack.Screen name='AddPlayerForm' component={AddPlayerForm} 
+          options={{
+            presentation: 'transparentModal',
+            headerShown: false,
+            contentStyle: {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)'
+            }
+
+          }}
+      />
+        <Stack.Screen name='SelectCourtForm' component={SelectCourtForm} 
+          options={{
+            presentation: 'transparentModal',
+            headerShown: false,
+            contentStyle: {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)'
+            }
+
+          }}
+      />
+      <Stack.Screen name='AddCourtForm' component={AddCourtForm} 
+          options={{
+            presentation: 'transparentModal',
+            headerShown: false,
+            contentStyle: {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)'
+            }
+
+          }}
+      />
+       <Stack.Screen name='SelectPlayerModal' component={SelectPlayerModal} 
           options={{
             presentation: 'transparentModal',
             headerShown: false,
@@ -87,6 +148,7 @@ function KingdomTennis() {
       />
         </Stack.Navigator>
       </NavigationContainer>
+      </EventFormProvider>
     </EventsContextProvider>
   )
 }

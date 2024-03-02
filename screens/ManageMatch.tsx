@@ -16,6 +16,7 @@ import {
 import { storeEvent, updateEvent, deleteEventBackend } from "../util/http"
 import LoadingOverlay from "../UI/LoadingOverlay"
 import ErrorOverlay from "../UI/ErrorOverlay"
+import { useColorTheme } from "../constants/theme"
 
 function ManageMatch({ route, navigation }) {
   const eventCtx = useContext(EventsContext)
@@ -23,7 +24,8 @@ function ManageMatch({ route, navigation }) {
   const isEditting = !!editedMatchId //true or false if edit match id exists; !!trasnfer into a boolean
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string>('')
-
+  const {colors} = useColorTheme();
+  console.log("🚀 ~ ManageMatch ~ colors:", colors)
   async function deleteEvent() {
     setIsLoading(true)
     try {
@@ -33,7 +35,7 @@ function ManageMatch({ route, navigation }) {
       navigation.goBack()
     } catch (error) {
       setError("Could not delete event.")
-      
+
     } finally {
       setIsLoading(false);
     }
@@ -45,7 +47,7 @@ function ManageMatch({ route, navigation }) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: isEditting ? "Edit Event" : "Add Event",
+      title: isEditting ? "Edit Event" : "Add Record",
       headerRight: () =>
         isEditting ? (
           <Ionicons
@@ -57,6 +59,7 @@ function ManageMatch({ route, navigation }) {
         ) : (
           ""
         ),
+      
     })
   }, [navigation, isEditting])
 
@@ -89,9 +92,10 @@ function ManageMatch({ route, navigation }) {
   }
 
   return (
-    <View style={styles.container}>
-      <Divider />
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      {/* <Divider /> */}
       <EventForm
+        navigation={navigation}
         onSubmit={confirmHandler}
         isEditting={isEditting}
         defaultValues={selectedEvent}
@@ -103,7 +107,7 @@ function ManageMatch({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: GlobalStyles.colors.gray500,
+    // backgroundColor: GlobalStyles.colors.gray500,
   },
 })
 export default ManageMatch

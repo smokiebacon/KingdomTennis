@@ -1,21 +1,46 @@
-import { TextInput, ToggleButton } from "react-native-paper"
+import { TextInput, ToggleButton, useTheme } from "react-native-paper"
 import { View, Pressable, StyleSheet, TouchableOpacity } from "react-native"
 import { useState } from "react"
 import Button from "../../UI/Button"
 import { Picker } from "@react-native-picker/picker"
 import { FormControl, Icon, Input, InputGroup, InputLeftAddon, InputRightAddon, Text} from 'native-base'
 import { useFormik } from 'formik'
-import * as Yup from 'yup';
+// import * as Yup from 'yup';
 import { format, subDays } from "date-fns"
 import { getFormattedDate } from "../../util/date"
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import supabase from "../../supabaseClient"
 import DateTimePicker, { AndroidNativeProps, IOSNativeProps,  } from "@react-native-community/datetimepicker"
 import Entypo from '@expo/vector-icons/Entypo'
+import { useColorTheme } from "../../constants/theme"
+import CustomTextInput from "./TextInput"
+import CustomText from "../common/Text"
+import * as Yup from 'yup';
+import CustomIcon from "../common/Icon"
+import { BaseStyle } from "../../constants/styles"
+import { useEventForm } from "../../store/eventForm-context"
 
 
+function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
 
-function EventForm({ onSubmit, isEditting, defaultValues }) {
+
+  const initialValues = {
+    date : null,
+
+  }
+  const validationSchema = Yup.object().shape({
+    date: Yup.date().required('Date is Required'),
+  })
+
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    validationSchema: validationSchema,
+    onSubmit: async (_values) => {
+    }
+  })
+  
+  
   const [inputValues, setInputValues] = useState({
     notes: defaultValues ? defaultValues.notes : "",
     duration: defaultValues ? defaultValues.duration.toString() : "",
@@ -26,11 +51,13 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
     opponent2: defaultValues ? defaultValues.opponent2 : "",
     session: defaultValues ? defaultValues.session : "Rally",
   })
-
+  // const theme = useTheme();
+  const { colors } = useColorTheme()
   const [showPicker, setShowPicker] = useState(false);
   const [mode, setMode] = useState<any>("date");
   const [date, setDate] = useState(new Date());
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const eventFormCtx = useEventForm()
   const showTimePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -40,13 +67,13 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
   };
 
   const handleConfirm = (date) => {
-    // console.warn("A date has been picked: ", date);
     const minutes = date.getMinutes() + date.getHours() * 60;
     console.log(minutes);
-    setInputValues({
-      ...inputValues,
-      duration: minutes,
-    })
+    eventFormCtx.changeValue('duration', minutes);
+    // setInputValues({
+    //   ...inputValues,
+    //   duration: minutes,
+    // })
 
     hideDatePicker();
   };
@@ -66,8 +93,9 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
 
 
   const onDateChange = (event, selectedDate) => {
-    setDate(selectedDate)
+    
     setShowPicker(false)
+    eventFormCtx.changeValue('date', selectedDate);
   }
 
   function inputChange(inputIdentifier, enteredValue) {
@@ -95,15 +123,13 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
       user_id : auth
     }
     console.log(eventData);
-  
-  
     onSubmit(eventData)
   }
   return (
-    <View>
+    <View style={{ paddingHorizontal: 10, }}>
       {showPicker ? (
         <DateTimePicker
-          value={date} //needs to be an Object
+          value={eventFormCtx.formValue.date} //needs to be an Object
           testID="dateTimePicker"
           mode={mode}
           onChange={onDateChange}
@@ -119,58 +145,58 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
       />
-      {/* <FormControl 
-      margin={1}
-       w={{
-  base: '96',
-}}>
-<FormControl.Label   >
-  <Text color={"white"}>
-        Date
-  </Text>
-</FormControl.Label>
-      <Input
-      value={date.toLocaleDateString()}
-       height={50}   leftElement={
-        <TouchableOpacity onPress={showDatepicker} style={{ marginHorizontal: 10, }}>
-      <Icon as={<Entypo name="calendar"   />} />
-        </TouchableOpacity>
-    } 
-    InputRightElement={<TouchableOpacity onPress={changeDateToYesterday} style={{  marginRight: 10, }}><Text>Yesterday</Text></TouchableOpacity>}
-    backgroundColor={"blueGray.100"}
-    />
-    
-      </FormControl> */}
-      
-      
-      <TextInput
-        value={date.toLocaleDateString()}
-        onChangeText={inputChange.bind(this, "date")}
-        outlineColor="green"
-        // disabled
-        left={
-          <TextInput.Icon
-            icon="calendar"
-            forceTextInputFocus={false}
-            onPress={showDatepicker}
+      <CustomTextInput
+            label={"Date"}
+            editable={false}
+            iconLeft={
+              <TouchableOpacity 
+              onPress={showDatepicker}
+              style={{ marginRight: 10, }}>
+            <CustomIcon Iconname="AntDesign" name="calendar" size={30} color={colors.text}  />
+              </TouchableOpacity>
+            }
+            placeholder={"Date"}
+            value={format(eventFormCtx?.formValue.date, 'yyy-MM-dd')}
+            selectionColor={colors.primary}
           />
-        }
-        right={
-          <TextInput.Icon
-            onPress={() => changeDateToYesterday()}
-            icon="eye"
-            forceTextInputFocus={false}
+          <View>
+          <CustomText variant="titleMedium" style={{ marginBottom: 8 }} >Court Location</CustomText>
+          <TouchableOpacity onPress={() => {
+            navigation.navigate('SelectCourtForm')
+          }} style={[BaseStyle.textInput, { height: 55, backgroundColor: colors.card}]}>
+            <CustomText>{eventFormCtx?.formValue?.court?.name}</CustomText>
+          </TouchableOpacity>
+          </View>
+          <CustomTextInput
+            label={"Duration"}
+            editable={false}
+            iconLeft={
+              <TouchableOpacity 
+              onPress={showTimePicker}
+              style={{ marginRight: 10, }}>
+            <CustomIcon Iconname="AntDesign" name="calendar" size={30} color={colors.text}  />
+              </TouchableOpacity>
+            }
+            value={`${eventFormCtx.formValue.duration}`}
+            placeholder="Hours and Minutes"
+            // value={}
+            selectionColor={colors.primary}
           />
-        }
-      />
-      <TextInput
-        label="Court Location"
-        value={inputValues.court}
-        placeholder="Court Location"
-        onChangeText={inputChange.bind(this, "court")}
-      />
-
-      <TextInput
+          <CustomTextInput
+          value={eventFormCtx.formValue.notes}
+          label="Notes"
+          placeholder="Notes"
+          onChangeText={(text:string) => {
+            eventFormCtx.changeValue('notes', text);
+          }}
+          multiline
+          numberOfLines={4}
+          style={{
+            height: 100,
+          }}
+          textAlignVertical={'top'}
+           />
+      {/* <TextInput
        left={
           <TextInput.Icon
             icon="calendar"
@@ -184,10 +210,13 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
         // keyboardType="decimal-pad"
         onChangeText={inputChange.bind(this, "duration")}
         
-      />
+      /> */}
       <Picker
+      style={{
+        backgroundColor: colors.card
+      }}
         itemStyle={{
-          color: "#008b8b",
+          color: colors.card,
         }}
         selectedValue={inputValues.session}
         onValueChange={inputChange.bind(this, "session")}
@@ -197,11 +226,8 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
         <Picker.Item label="Rally" value="Rally" />
         <Picker.Item label="Match" value="Match" />
       </Picker>
-
-
       {inputValues.session === "Doubles" ? (
         <>
-        
           <TextInput
             label="Teammate"
             value={inputValues.teammate}
@@ -219,22 +245,33 @@ function EventForm({ onSubmit, isEditting, defaultValues }) {
         ""
       )}
       {inputValues.session === "Singles" || "Rally" ? (
-        <TextInput
-          label="Opponent 1"
-          value={inputValues.opponent}
-          placeholder="Opponent"
-          onChangeText={inputChange.bind(this, "opponent")}
-        />
+         <View>
+         <CustomText variant="titleMedium" style={{ marginBottom: 8 }} >Select Player</CustomText>
+         <TouchableOpacity onPress={() => {
+           navigation.navigate('SelectPlayerModal', { prop : 'opponent',label : "Select Opponent" })
+         }} style={[BaseStyle.textInput, { height: 55, backgroundColor: colors.card}]}>
+           <CustomText>{eventFormCtx?.formValue?.opponent?.name || "Enter Players"}</CustomText>
+         </TouchableOpacity>
+         </View>
+        // <TouchableOpacity style={{  padding: 15, margin: 15, }} onPress={() => navigation.navigate('SelectPlayer')}>
+        //   <Text>Opponent 1</Text>
+        // </TouchableOpacity>
+        // <TextInput
+        //   label="Opponent 1"
+        //   value={inputValues.opponent}
+        //   placeholder="Opponent"
+        //   onChangeText={inputChange.bind(this, "opponent")}
+        // />
       ) : (
         ""
       )}
-      <TextInput
+      {/* <TextInput
         label="Notes"
         value={inputValues.notes}
         placeholder="Great forehands today!"
         multiline={true}
         onChangeText={inputChange.bind(this, "notes")}
-      />
+      /> */}
       <Button onPress={submitHandler}>
         {isEditting ? "Save Changes" : "Add Event"}
       </Button>

@@ -20,5 +20,8 @@
     "create_new_user" : "Create a new User",
     "login_instead" : "Login Instead",
     "confirm_email_address" : "Confirm Email Address",
-    "confirm_password" : "Confirm Password"
+    "confirm_password" : "Confirm Password",
+    "select_player" : "Select Player",
+    "add_new_player" : "Add New Player",
+    "court_location" : "Court Location"
 }

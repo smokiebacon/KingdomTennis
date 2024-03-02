@@ -1,3 +1,4 @@
+import {StyleSheet} from 'react-native';
 export const GlobalStyles = {
   colors: {
     primary50: "#e4d9fd",
@@ -14,6 +15,41 @@ export const GlobalStyles = {
     gray700: "#221c30",
   },
 }
+
+
+/**
+ * Common basic style defines
+ */
+export const BaseStyle = StyleSheet.create({
+  textInput: {
+    height: 46,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    width: '100%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    // flex: 1,
+  },
+  safeAreaView: {
+    flex: 1,
+  },
+});
+
+export const BaseColor = {
+  grayColor: '#9B9B9B',
+  dividerColor: '#BDBDBD',
+  whiteColor: '#FFFFFF',
+  fieldColor: '#F5F5F5',
+  yellowColor: '#FDC60A',
+  navyBlue: '#3C5A99',
+  kashmir: '#5D6D7E',
+  orangeColor: '#E5634D',
+  blueColor: '#5DADE2',
+  pinkColor: '#A569BD',
+  greenColor: '#58D68D',
+};
+
 
 export const Colors = {
   primary100: "#f9beda",
