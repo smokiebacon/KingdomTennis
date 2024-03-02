@@ -3,14 +3,14 @@ import { View, Pressable, StyleSheet, TouchableOpacity } from "react-native"
 import { useState } from "react"
 import Button from "../../UI/Button"
 import { Picker } from "@react-native-picker/picker"
-import { Box, FormControl, Icon, Input, InputGroup, InputLeftAddon, InputRightAddon, Text} from 'native-base'
+import { Box, FormControl, Icon, Input, InputGroup, InputLeftAddon, InputRightAddon, Text } from 'native-base'
 import { useFormik } from 'formik'
 // import * as Yup from 'yup';
 import { format, subDays } from "date-fns"
 import { getFormattedDate } from "../../util/date"
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import supabase from "../../supabaseClient"
-import DateTimePicker, { AndroidNativeProps, IOSNativeProps,  } from "@react-native-community/datetimepicker"
+import DateTimePicker, { AndroidNativeProps, IOSNativeProps, } from "@react-native-community/datetimepicker"
 import Entypo from '@expo/vector-icons/Entypo'
 import { useColorTheme } from "../../constants/theme"
 import CustomTextInput from "./TextInput"
@@ -27,7 +27,7 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
 
 
   const initialValues = {
-    date : null,
+    date: null,
 
   }
   const validationSchema = Yup.object().shape({
@@ -41,8 +41,8 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
     onSubmit: async (_values) => {
     }
   })
-  
-  
+
+
   const [inputValues, setInputValues] = useState({
     notes: defaultValues ? defaultValues.notes : "",
     duration: defaultValues ? defaultValues.duration.toString() : "",
@@ -59,6 +59,7 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
   const [mode, setMode] = useState<any>("date");
   const [date, setDate] = useState(new Date());
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [selectedPLayerNo, setSelectedPlayerNo] = useState('Single')
   const eventFormCtx = useEventForm()
   const showTimePicker = () => {
     setDatePickerVisibility(true);
@@ -100,7 +101,7 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
 
 
   const onDateChange = (event, selectedDate) => {
-    
+
     setShowPicker(false)
     eventFormCtx.changeValue('date', selectedDate);
   }
@@ -114,7 +115,7 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
     })
   }
   async function submitHandler() {
-    if(!inputValues.duration) {
+    if (!inputValues.duration) {
       return;
     }
     const auth = (await supabase.auth.getSession()).data.session.user.id;
@@ -127,7 +128,7 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
       opponent: inputValues.opponent,
       opponent2: inputValues.opponent2,
       session: inputValues.session,
-      user_id : auth
+      user_id: auth
     }
     console.log(eventData);
     onSubmit(eventData)
@@ -142,7 +143,7 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
           onChange={onDateChange}
         />
       ) : null}
-         <DateTimePickerModal
+      <DateTimePickerModal
         isVisible={isDatePickerVisible}
         // mode="date"
         locale="en_GB"
@@ -153,66 +154,69 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
         onCancel={hideDatePicker}
       />
       <CustomTextInput
-            label={"Date"}
-            editable={false}
-            iconLeft={
-              <TouchableOpacity 
-              onPress={showDatepicker}
-              style={{ marginRight: 10, }}>
-            <CustomIcon Iconname="AntDesign" name="calendar" size={30} color={colors.text}  />
-              </TouchableOpacity>
-            }
-            placeholder={"Date"}
-            value={format(eventFormCtx?.formValue.date, 'yyy-MM-dd')}
-            selectionColor={colors.primary}
-          />
-          <View>
-          <CustomText variant="titleMedium" style={{ marginBottom: 8 }} >Court Location</CustomText>
-          <TouchableOpacity onPress={() => {
-            navigation.navigate('SelectCourtForm')
-          }} style={[BaseStyle.textInput, { height: 55, backgroundColor: colors.card}]}>
-            <CustomText>{eventFormCtx?.formValue?.court?.name}</CustomText>
+        label={"Date"}
+        editable={false}
+        iconLeft={
+          <TouchableOpacity
+            onPress={showDatepicker}
+            style={{ marginRight: 10, }}>
+            <CustomIcon Iconname="AntDesign" name="calendar" size={30} color={colors.text} />
           </TouchableOpacity>
-          </View>
-          <CustomTextInput
-            label={"Duration"}
-            editable={false}
-            iconLeft={
-              <TouchableOpacity 
-              onPress={showTimePicker}
-              style={{ marginRight: 10, }}>
-            <CustomIcon Iconname="AntDesign" name="calendar" size={30} color={colors.text}  />
-              </TouchableOpacity>
-            }
-            value={`${eventFormCtx.formValue.duration}`}
-            placeholder="Hours and Minutes"
-            // value={}
-            selectionColor={colors.primary}
-          />
-          <CustomTextInput
-          value={eventFormCtx.formValue.notes}
-          label="Notes"
-          placeholder="Notes"
-          onChangeText={(text:string) => {
-            eventFormCtx.changeValue('notes', text);
-          }}
-          multiline
-          numberOfLines={4}
-          style={{
-            height: 100,
-          }}
-          textAlignVertical={'top'}
-           />
-           <TouchableOpacity onPress={onOpen} style={[BaseStyle.textInput,{ height: 55, backgroundColor: colors.card, width: 150,}]}>
-            <CustomText>Select Category</CustomText>
-           </TouchableOpacity>
-           <Actionsheet isOpen={isOpen} onClose={onClose} >
-            <Actionsheet.Content backgroundColor={colors.background}>
-            <Box w="100%" h={60} px={4} justifyContent="center">
+        }
+        placeholder={"Date"}
+        value={format(eventFormCtx?.formValue.date, 'yyy-MM-dd')}
+        selectionColor={colors.primary}
+      />
+      <View>
+        <CustomText variant="titleMedium" style={{ marginBottom: 8 }} >Court Location</CustomText>
+        <TouchableOpacity onPress={() => {
+          navigation.navigate('SelectCourtForm')
+        }} style={[BaseStyle.textInput, { height: 55, backgroundColor: colors.card }]}>
+          <CustomText>{eventFormCtx?.formValue?.court?.name}</CustomText>
+        </TouchableOpacity>
+      </View>
+      <CustomTextInput
+        label={"Duration"}
+        editable={false}
+        iconLeft={
+          <TouchableOpacity
+            onPress={showTimePicker}
+            style={{ marginRight: 10, }}>
+            <CustomIcon Iconname="AntDesign" name="calendar" size={30} color={colors.text} />
+          </TouchableOpacity>
+        }
+        value={`${eventFormCtx.formValue.duration}`}
+        placeholder="Hours and Minutes"
+        // value={}
+        selectionColor={colors.primary}
+      />
+      <CustomTextInput
+        value={eventFormCtx.formValue.notes}
+        label="Notes"
+        placeholder="Notes"
+        onChangeText={(text: string) => {
+          eventFormCtx.changeValue('notes', text);
+        }}
+        multiline
+        numberOfLines={4}
+        style={{
+          height: 100,
+        }}
+        textAlignVertical={'top'}
+      />
+
+
+
+      <TouchableOpacity onPress={onOpen} style={[BaseStyle.textInput, { height: 55, backgroundColor: colors.card, width: 150, }]}>
+        <CustomText>Select Category</CustomText>
+      </TouchableOpacity>
+      <Actionsheet isOpen={isOpen} onClose={onClose} >
+        <Actionsheet.Content backgroundColor={colors.background}>
+          <Box w="100%" h={60} px={4} justifyContent="center">
             <CustomText>
               Select Category
             </CustomText>
-            
+
           </Box>
           <Box w={"100%"} display={'flex'} flexDirection={"row"} flexWrap={"wrap"} >
             <SelectCategory label="Rally" onPress={() => {
@@ -225,8 +229,25 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
               console.log("pressed")
             }} />
           </Box>
-            </Actionsheet.Content>
-           </Actionsheet>
+        </Actionsheet.Content>
+      </Actionsheet>
+
+
+
+      {/* Players */}
+      <View style={[style.playerRow]}>
+        <View>
+          <CustomText variant={"titleMedium"}>Players</CustomText>
+        </View>
+        <View style={{ flexDirection: 'row' }}>
+          <TouchableOpacity onPress={() => { setSelectedPlayerNo('Single') }} style={[style.selectPlayerNo, { backgroundColor: selectedPLayerNo === 'Single' ? colors.primary : colors.card, borderRadius: selectedPLayerNo === 'Single' ? 5 : 0 }]}>
+            <CustomText>Single</CustomText>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { setSelectedPlayerNo('Double') }} style={[style.selectPlayerNo, { backgroundColor: selectedPLayerNo === 'Double' ? colors.primary : colors.card, borderRadius: selectedPLayerNo === 'Double' ? 5 : 0 }]}>
+            <CustomText>Double</CustomText>
+          </TouchableOpacity>
+        </View>
+      </View>
       {/* <TextInput
        left={
           <TextInput.Icon
@@ -276,14 +297,14 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
         ""
       )}
       {inputValues.session === "Singles" || "Rally" ? (
-         <View>
-         <CustomText variant="titleMedium" style={{ marginBottom: 8 }} >Select Player</CustomText>
-         <TouchableOpacity onPress={() => {
-           navigation.navigate('SelectPlayerModal', { prop : 'opponent',label : "Select Opponent" })
-         }} style={[BaseStyle.textInput, { height: 55, backgroundColor: colors.card}]}>
-           <CustomText>{eventFormCtx?.formValue?.opponent?.name || "Enter Players"}</CustomText>
-         </TouchableOpacity>
-         </View>
+        <View>
+          <CustomText variant="titleMedium" style={{ marginBottom: 8 }} >Select Player</CustomText>
+          <TouchableOpacity onPress={() => {
+            navigation.navigate('SelectPlayerModal', { prop: 'opponent', label: "Select Opponent" })
+          }} style={[BaseStyle.textInput, { height: 55, backgroundColor: colors.card }]}>
+            <CustomText>{eventFormCtx?.formValue?.opponent?.name || "Enter Players"}</CustomText>
+          </TouchableOpacity>
+        </View>
         // <TouchableOpacity style={{  padding: 15, margin: 15, }} onPress={() => navigation.navigate('SelectPlayer')}>
         //   <Text>Opponent 1</Text>
         // </TouchableOpacity>
@@ -309,4 +330,10 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
     </View>
   )
 }
+
+
+const style = StyleSheet.create({
+  playerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 10, },
+  selectPlayerNo: { paddingVertical: 10, paddingHorizontal: 20, height: 45, justifyContent: 'center' }
+})
 export default EventForm

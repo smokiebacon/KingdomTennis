@@ -75,7 +75,7 @@ const SelectPlayerModal = ({ navigation, route }) => {
         <View>
           <TouchableOpacity style={[BaseStyle.textInput, { height: 55, backgroundColor: colors.card, }]}>
             <View style={{  flexDirection: 'row' , alignItems: 'center'}}>
-            <Avatar.Text style={{ marginRight: 10, }} size={35} label={eventsFormCtx.formValue[prop].name[0]} />
+            <Avatar.Text style={{ marginRight: 10, }} size={35} label={eventsFormCtx?.formValue[prop]?.name[0]} />
             <CustomText variant='titleMedium'>{eventsFormCtx.formValue[prop]?.name}</CustomText>
             </View>
           </TouchableOpacity>
