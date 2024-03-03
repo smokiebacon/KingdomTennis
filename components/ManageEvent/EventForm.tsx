@@ -21,6 +21,7 @@ import { BaseColor, BaseStyle } from "../../constants/styles"
 import { useEventForm } from "../../store/eventForm-context"
 import { Actionsheet, useDisclose } from "native-base";
 import { SelectCategory } from "./SelectCategory"
+import ShowPlayer from "./ShowPlayer"
 
 
 function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
@@ -264,43 +265,27 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
       <View>
       <CustomText variant={"titleMedium"}>Your Team</CustomText>
       <View style={[style.teamPlayersContainer]}>
-            <View style={[style.teamPlayer]}>
-              <Avatar.Text size={40} label={user?.name[0]} style={{ backgroundColor: BaseColor.orangeColor }} ></Avatar.Text>
-              <CustomText variant={"titleMedium"}>{user?.name}</CustomText>
-            </View>
-      </View>
-      </View>
-      {/* <TextInput
-       left={
-          <TextInput.Icon
-            icon="calendar"
-            forceTextInputFocus={false}
-            onPress={showTimePicker}
-          />
+        <ShowPlayer playerName={user?.name} />
+        {
+          selectedPLayerNo === 'Double' &&
+        <ShowPlayer playerName={null} />
         }
-        label="Duration"
-        value={`${inputValues.duration}`}
-        placeholder="Hours and Minutes"
-        // keyboardType="decimal-pad"
-        onChangeText={inputChange.bind(this, "duration")}
-        
-      /> */}
-      {/* <Picker
-      style={{
-        backgroundColor: colors.card
-      }}
-        itemStyle={{
-          color: colors.card,
-        }}
-        selectedValue={inputValues.session}
-        onValueChange={inputChange.bind(this, "session")}
-      >
-        <Picker.Item label="Singles" value="Singles" />
-        <Picker.Item label="Doubles" value="Doubles" />
-        <Picker.Item label="Rally" value="Rally" />
-        <Picker.Item label="Match" value="Match" />
-      </Picker> */}
-      {inputValues.session === "Doubles" ? (
+      </View>
+      </View>
+      <View>
+      <CustomText variant={"titleMedium"}>Opponent</CustomText>
+      <View style={[style.teamPlayersContainer]}>
+        <ShowPlayer playerName={null} onPressAddPlayer={() => {
+          navigation.navigate('SelectPlayer')
+        }} />
+        {
+            Boolean(selectedPLayerNo === 'Double') &&
+        <ShowPlayer playerName={null} />
+        }
+      </View>
+      </View>
+
+      {/* {inputValues.session === "Doubles" ? (
         <>
           <TextInput
             label="Teammate"
@@ -327,25 +312,9 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
             <CustomText>{eventFormCtx?.formValue?.opponent?.name || "Enter Players"}</CustomText>
           </TouchableOpacity>
         </View>
-        // <TouchableOpacity style={{  padding: 15, margin: 15, }} onPress={() => navigation.navigate('SelectPlayer')}>
-        //   <Text>Opponent 1</Text>
-        // </TouchableOpacity>
-        // <TextInput
-        //   label="Opponent 1"
-        //   value={inputValues.opponent}
-        //   placeholder="Opponent"
-        //   onChangeText={inputChange.bind(this, "opponent")}
-        // />
       ) : (
         ""
-      )}
-      {/* <TextInput
-        label="Notes"
-        value={inputValues.notes}
-        placeholder="Great forehands today!"
-        multiline={true}
-        onChangeText={inputChange.bind(this, "notes")}
-      /> */}
+      )} */}
       <Button onPress={submitHandler}>
         {isEditting ? "Save Changes" : "Add Event"}
       </Button>

@@ -18,7 +18,7 @@ type CustomInputProps = {
   selectionColor?:string;
   icon? : ReactNode;
   style?: any;
-  onChangeText?:(text: string) => {};
+  onChangeText?:(text: string) => void;
   onFocus? : () => {};
   value?: string;
   success?:boolean;
