@@ -8,7 +8,7 @@ const initialNotes = {
         date: new Date(),
         court: "",
         teammate: "",
-        opponent: {},
+        opponent: '',
         opponent2: "",
         session: "Rally",
     }
@@ -39,7 +39,6 @@ function eventFormReducer(state, action) {
                     [action?.payload?.prop] : action?.payload?.data,
                 }
             }
-    
         default:
             return state;
     }

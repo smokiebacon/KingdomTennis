@@ -17,10 +17,10 @@ const ShowPlayer:FC<ShowPlayerProps> = ({playerName,onPressAddPlayer}) => {
     return (
         <>
         {playerName ?
-<View style={[style.teamPlayer]}>
+<TouchableOpacity onPress={onPressAddPlayer} style={[style.teamPlayer]}>
               <Avatar.Text size={40} label={playerName[0]} style={{ backgroundColor: BaseColor.orangeColor }} ></Avatar.Text>
               <CustomText variant={"titleMedium"}>{playerName}</CustomText>
-            </View>
+            </TouchableOpacity>
             : 
             <View style={[style.teamPlayer]}>
                 <TouchableOpacity onPress={onPressAddPlayer} style={[style.addPlayerIcon,{backgroundColor: colors.card,}]}>

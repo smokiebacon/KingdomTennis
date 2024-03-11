@@ -7,13 +7,17 @@ import Button from "../UI/Button";
 import { useColorTheme } from "../constants/theme";
 import CustomTextInput from "../components/ManageEvent/TextInput";
 import CustomIcon from "../components/common/Icon";
+import { useEventForm } from "../store/eventForm-context";
 
-const SelectPlayer = ({ navigation }) => {
+const SelectPlayer = ({ navigation, route }) => {
+    // console.log("route", route.params);
+    const fieldName = route.params.fieldName;
     const [players, setPlayers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('')
     const { colors }   = useColorTheme()
     console.log("🚀 ~ SelectPlayer ~ players:", players)
+    const eventFormCtx = useEventForm();
     const fetchPlayerData = async () => {
         setLoading(true);
         const data = await getPlayers();
@@ -45,21 +49,28 @@ const SelectPlayer = ({ navigation }) => {
         return () => subscribe;
     },[])   
     
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerRight : () => (
-                <TouchableOpacity onPress={() => {
-                    navigation.navigate('AddPlayerForm')
-                }}>
-                    <Text style={{ color: '#fff' }}>Add Player</Text>
-                </TouchableOpacity>
-            )
-        })
-    },[])
+    // useLayoutEffect(() => {
+    //     navigation.setOptions({
+    //         headerRight : () => (
+    //             <TouchableOpacity onPress={() => {
+    //                 navigation.navigate('AddPlayerForm')
+    //             }}>
+    //                 <Text style={{ color: '#fff' }}>Add Player</Text>
+    //             </TouchableOpacity>
+    //         )
+    //     })
+    // },[])
     
     const renderItem = ({ item }) => {
         return (
-            <View style={{ paddingVertical: 15, marginHorizontal: 10, flexDirection: 'row' , alignItems: 'center', justifyContent: 'space-between' }}>
+            <TouchableOpacity
+            onPress={() => {
+                eventFormCtx.changeValue(fieldName, item.name)
+                navigation.goBack();
+            }}
+            
+            
+             style={{ paddingVertical: 15, marginHorizontal: 10, flexDirection: 'row' , alignItems: 'center', justifyContent: 'space-between' }}>
                 <View style={{ flexDirection: 'row' , alignItems: 'center',  }}>
                     <Avatar.Text style={{ marginHorizontal: 10, }} size={35} label={item.name[0]} />
                     <Text style={{ color: GlobalStyles.colors.primary50 }} variant="titleMedium">{item.name}</Text>
@@ -70,7 +81,7 @@ const SelectPlayer = ({ navigation }) => {
                     fetchPlayerData();
                 }}
                 >Remove</Button> */}
-            </View>
+            </TouchableOpacity>
         )
     }
     return (

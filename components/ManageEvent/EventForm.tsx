@@ -268,19 +268,28 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
         <ShowPlayer playerName={user?.name} />
         {
           selectedPLayerNo === 'Double' &&
-        <ShowPlayer playerName={null} />
+        <ShowPlayer playerName={eventFormCtx.formValue.teammate} 
+        onPressAddPlayer={() => {
+          navigation.navigate('SelectPlayer', { fieldName : "teammate" })
+        }}
+        />
         }
       </View>
       </View>
       <View>
       <CustomText variant={"titleMedium"}>Opponent</CustomText>
       <View style={[style.teamPlayersContainer]}>
-        <ShowPlayer playerName={null} onPressAddPlayer={() => {
-          navigation.navigate('SelectPlayer')
+        <ShowPlayer playerName={eventFormCtx.formValue.opponent} onPressAddPlayer={() => {
+          navigation.navigate('SelectPlayer', { fieldName : "opponent" })
         }} />
         {
             Boolean(selectedPLayerNo === 'Double') &&
-        <ShowPlayer playerName={null} />
+        <ShowPlayer playerName={eventFormCtx.formValue.opponent2} 
+        onPressAddPlayer={() => {
+          navigation.navigate('SelectPlayer', { fieldName : "opponent2" })
+        }}
+        
+         />
         }
       </View>
       </View>

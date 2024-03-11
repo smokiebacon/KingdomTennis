@@ -12,7 +12,7 @@ import { TextInput, HelperText } from 'react-native-paper';
 
 // import i18next from 'i18next';
 import * as Yup from 'yup';
-import { storePlayer } from '../../util/http';
+import { getCourts, storePlayer } from '../../util/http';
 import supabase from '../../supabaseClient';
 import { useColorTheme } from '../../constants/theme';
 import CustomTextInput from './TextInput';
@@ -21,16 +21,15 @@ import { useEventForm } from '../../store/eventForm-context';
 const SelectCourtForm = ({ navigation }) => {
     const { t } = useTranslation();
     const { colors } = useColorTheme();
-    const getCourts = async () => {
-      const previousCourts = await AsyncStorage.getItem('@favouriteCourts');
-      console.log("🚀 ~ getCourts ~ previousCourts:", previousCourts)
-      return JSON.parse(previousCourts);
-    }
+    
     const eventsFormCtx = useEventForm()
     const [favourtes, setFavourites] = useState([]);
     useEffect(() => {
-      getCourts().then(favCourts => {
-        setFavourites(favCourts || []);
+      getCourts().then(allCourts => {
+        console.log('fav', allCourts);
+        const fav = allCourts.filter(item => item.is_favourite);
+        setFavourites(fav || []);
+        // setFavourites(favCourts || []);
       });
     },[])
   return (
