@@ -42,12 +42,26 @@ export async function getPlayers() {
   console.log("🚀 ~ getPlayers ~ data:", data, error);
   return data;
 }
+
+export async function getSessions() {
+  const user_id = (await supabase.auth.getSession()).data.session.user.id;
+
+  const { data, error } = await supabase.from('Categories').select('*').eq('auth_id', user_id);
+  // .eq('auth_id', user_id);
+  console.log("🚀 ~ getPlayers ~ data:", data, error);
+  return data;
+}
+
 export async function storeCourtLocation(data: { name: string, auth_id: string, is_favourite: boolean }) {
   return await supabase.from('courts').insert(data);
 }
 export async function storePlayer(data: { name: string, auth_id: string }) {
   console.log("🚀 ~ storePlayer ~ data:", data)
   return await supabase.from('Players').insert(data);
+}
+
+export async function storeCategory(data: { name: string, auth_id: string }) {
+  return await supabase.from('Categories').insert(data)
 }
 export async function getEvents() {
   const user_id = (await supabase.auth.getSession()).data.session.user.id;

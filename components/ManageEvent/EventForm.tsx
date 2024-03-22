@@ -1,5 +1,5 @@
 import { Avatar, TextInput, ToggleButton, useTheme } from "react-native-paper"
-import { View, Pressable, StyleSheet, TouchableOpacity, ScrollView } from "react-native"
+import { View, Pressable, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from "react-native"
 import { useEffect, useState } from "react"
 import Button from "../../UI/Button"
 import { Picker } from "@react-native-picker/picker"
@@ -65,7 +65,7 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
   };
   const [user, setUser ] = useState(null);
 
-
+  const [allCategories, setAllCategories] = useState([{ name: "Rally" }, { name: "Match" }, { name : "Practice" }])
 
   useEffect(() => {
     supabase.auth.getSession().then(res => {
@@ -224,21 +224,35 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
       <Actionsheet isOpen={isOpen} onClose={onClose} >
         <Actionsheet.Content backgroundColor={colors.background}>
           <Box w="100%" h={60} px={4} justifyContent="center">
-            <CustomText>
+            <CustomText >
               Select Category
             </CustomText>
 
           </Box>
           <Box w={"100%"} display={'flex'} flexDirection={"row"} flexWrap={"wrap"} >
-            <SelectCategory label="Rally" onPress={() => {
-              console.log("pressed")
-            }} />
-            <SelectCategory label="Rally" onPress={() => {
-              console.log("pressed")
-            }} />
-            <SelectCategory label="Rally" onPress={() => {
-              console.log("pressed")
-            }} />
+            {
+              allCategories?.map(category => {
+                return (
+                  <SelectCategory selected={eventFormCtx.formValue.session === category.name} label={category.name} onPress={() => {
+                    
+                    eventFormCtx.changeValue("session", category.name)
+                  }} />  
+                )
+              })
+            }
+
+
+            <TouchableOpacity onPress={() => {
+              navigation.navigate('AddNewCategory')
+            }} style={style.addCustom}>
+              <CustomIcon 
+              Iconname="AntDesign"
+              name='plus'
+              size={20}
+              color={colors.text}
+              />
+              <CustomText variant={"titleSmall"}>Add Custom</CustomText>
+            </TouchableOpacity>
           </Box>
         </Actionsheet.Content>
       </Actionsheet>
@@ -293,36 +307,7 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
       </View>
       </View>
 
-      {/* {inputValues.session === "Doubles" ? (
-        <>
-          <TextInput
-            label="Teammate"
-            value={inputValues.teammate}
-            placeholder="Teammate"
-            onChangeText={inputChange.bind(this, "teammate")}
-          />
-          <TextInput
-            label="Opponent 2"
-            value={inputValues.opponent2}
-            placeholder="Opponent 2"
-            onChangeText={inputChange.bind(this, "opponent2")}
-          />
-        </>
-      ) : (
-        ""
-      )}
-      {inputValues.session === "Singles" || "Rally" ? (
-        <View>
-          <CustomText variant="titleMedium" style={{ marginBottom: 8 }} >Select Player</CustomText>
-          <TouchableOpacity onPress={() => {
-            navigation.navigate('SelectPlayerModal', { prop: 'opponent', label: "Select Opponent" })
-          }} style={[BaseStyle.textInput, { height: 55, backgroundColor: colors.card }]}>
-            <CustomText>{eventFormCtx?.formValue?.opponent?.name || "Enter Players"}</CustomText>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        ""
-      )} */}
+     
       <Button onPress={submitHandler}>
         {isEditting ? "Save Changes" : "Add Event"}
       </Button>
@@ -336,6 +321,16 @@ const style = StyleSheet.create({
   playerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 10, },
   selectPlayerNo: { paddingVertical: 10, paddingHorizontal: 20, height: 45, justifyContent: 'center' },
   teamPlayersContainer : {  marginTop: 10, },
-  teamPlayer: { flexDirection: 'row', alignItems: 'center', gap: 10 }
+  teamPlayer: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  addCustom: {
+    ...BaseStyle.textInput, 
+    height: 55, 
+    width: Dimensions.get('screen').width / 2.5,
+    marginRight: 20,
+    marginTop: 20,
+    justifyContent: 'center',
+    gap: 10,
+  }
+
 })
 export default EventForm

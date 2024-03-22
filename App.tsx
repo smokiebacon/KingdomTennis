@@ -36,6 +36,7 @@ import SelectCourtForm from "./components/ManageEvent/SelectCourtLocation"
 import AddCourtForm from "./components/ManageEvent/AddNewCourt"
 import AllCourts from "./screens/AllCourts"
 import SelectPlayerModal from "./components/ManageEvent/SelectPlayerModal"
+import AddNewCategoryForm from "./components/ManageEvent/AddNewCategory"
 function AuthStack() {
   const { t } = useTranslation()
   return (
@@ -116,6 +117,21 @@ function KingdomTennis() {
 
           }}
       />
+
+<Stack.Screen name='AddNewCategory' component={AddNewCategoryForm} 
+          options={{
+            presentation: 'transparentModal',
+            headerShown: false,
+            contentStyle: {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)'
+            }
+
+          }}
+      />
+      
+      
+      
+      
         <Stack.Screen name='SelectCourtForm' component={SelectCourtForm} 
           options={{
             presentation: 'transparentModal',
