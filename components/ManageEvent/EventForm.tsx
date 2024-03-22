@@ -288,7 +288,6 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
         onPressAddPlayer={() => {
           navigation.navigate('SelectPlayer', { fieldName : "opponent2" })
         }}
-        
          />
         }
       </View>

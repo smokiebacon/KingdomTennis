@@ -56,14 +56,11 @@ const SelectCourtForm = ({ navigation }) => {
             {
               favourtes?.map(court => {
                 return (
-                  <TouchableOpacity onPress={() => {
+                  <TouchableOpacity key={court.id} onPress={() => {
                     eventsFormCtx.changeValue('court', court);
                     navigation?.goBack();
                   }} style={{ backgroundColor:  court.id === eventsFormCtx?.formValue?.court?.id ? colors.primary:  colors.card, padding: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',  }}>
                     <CustomText variant="titleSmall" style={{ color: court.id === eventsFormCtx?.formValue?.court?.id ? '#000' : '#fff' }}>{court?.name}</CustomText>
-                    <TouchableOpacity style={{ backgroundColor: 'rgb(33,82,66)', paddingHorizontal: 10, paddingVertical: 5, }}>
-                      <CustomText variant="bodyMedium" >Remove</CustomText>
-                    </TouchableOpacity>
                   </TouchableOpacity>
                 )
               })
