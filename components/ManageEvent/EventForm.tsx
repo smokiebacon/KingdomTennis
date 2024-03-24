@@ -22,6 +22,7 @@ import { useEventForm } from "../../store/eventForm-context"
 import { Actionsheet, useDisclose } from "native-base";
 import { SelectCategory } from "./SelectCategory"
 import ShowPlayer from "./ShowPlayer"
+import { getSessions } from "../../util/http"
 
 
 function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
@@ -64,8 +65,8 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
     setDatePickerVisibility(true);
   };
   const [user, setUser ] = useState(null);
-
-  const [allCategories, setAllCategories] = useState([{ name: "Rally" }, { name: "Match" }, { name : "Practice" }])
+  const allTimeSessionTypes = [{ name: "Rally" }, { name: "Match" }, { name : "Practice" }];
+  const [allCategories, setAllCategories] = useState(allTimeSessionTypes)
 
   useEffect(() => {
     supabase.auth.getSession().then(res => {
@@ -76,6 +77,15 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
+
+
+  useEffect(() => {
+    getSessions().then(res => {
+        console.log("res",res)
+        const newArr = [...allTimeSessionTypes, ...res]
+        setAllCategories(newArr);
+    })
+  }, [])
 
   const handleConfirm = (date) => {
     const minutes = date.getMinutes() + date.getHours() * 60;
@@ -215,19 +225,15 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
         }}
         textAlignVertical={'top'}
       />
-
-
-
       <TouchableOpacity onPress={onOpen} style={[BaseStyle.textInput, { height: 55, backgroundColor: colors.card, width: 150, }]}>
-        <CustomText>Select Category</CustomText>
+        <CustomText>{eventFormCtx.formValue.session || "Select Category"}</CustomText>
       </TouchableOpacity>
       <Actionsheet isOpen={isOpen} onClose={onClose} >
         <Actionsheet.Content backgroundColor={colors.background}>
           <Box w="100%" h={60} px={4} justifyContent="center">
-            <CustomText >
+            <CustomText variant="titleMedium" >
               Select Category
             </CustomText>
-
           </Box>
           <Box w={"100%"} display={'flex'} flexDirection={"row"} flexWrap={"wrap"} >
             {

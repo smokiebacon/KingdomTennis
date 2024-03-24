@@ -18,6 +18,7 @@ import { useColorTheme } from '../../constants/theme';
 import CustomTextInput from './TextInput';
 import CustomText from '../common/Text';
 import { useEventForm } from '../../store/eventForm-context';
+import CustomIcon from '../common/Icon';
 const SelectCourtForm = ({ navigation }) => {
     const { t } = useTranslation();
     const { colors } = useColorTheme();
@@ -41,11 +42,16 @@ const SelectCourtForm = ({ navigation }) => {
         <View style={{ backgroundColor: colors.background, padding: 10, borderRadius: 10, }}>
             <View style={{ justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center',  }}>
             <CustomText style={{ marginBottom : 10 }} variant="titleMedium"  >{t('court_location')}</CustomText>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
+              <TouchableOpacity onPress={navigation.goBack}>
+              <CustomIcon  Iconname='Entypo' name={"cross"} size={25} color={colors.text}/>
+              </TouchableOpacity>
             <TouchableOpacity onPress={() => {
-                navigation.navigate('AllCourts');
+              navigation.navigate('AllCourts');
             }}>
-            <AntDesign  size={20} color={colors.text} name="setting"/>
+            <CustomIcon Iconname='MaterialIcons' name={"navigate-next"} size={30} color={colors.text} />
             </TouchableOpacity>
+              </View>
             </View>
             <View>
             <TouchableOpacity style={[BaseStyle.textInput, { height: 55, backgroundColor: colors.card}]}>

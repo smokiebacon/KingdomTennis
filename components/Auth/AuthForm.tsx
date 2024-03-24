@@ -4,6 +4,7 @@ import { StyleSheet, View } from "react-native"
 import Button from "../../UI/Button"
 import Input from "./Input"
 import { useTranslation } from "react-i18next"
+import CustomTextInput from "../ManageEvent/TextInput"
 
 function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
   const [enteredEmail, setEnteredEmail] = useState("")
@@ -50,6 +51,14 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
   return (
     <View>
       <View>
+        <CustomTextInput 
+         label={('email_address')}
+         secureTextEntry
+         onChangeText={updateInputValueHandler.bind(this, "email")}
+         value={enteredEmail}
+         keyboardType={"email-address"}
+         isValid={emailIsInvalid}
+        />
         <Input
           secure={false}
           label={t('email_address')}

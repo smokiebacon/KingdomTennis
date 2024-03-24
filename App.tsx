@@ -212,6 +212,12 @@ function MatchesOverView() {
     </BottomTabs.Navigator>
   )
 }
+i18next.use(initReactI18next).init({
+  resources : languages,
+  lng : defaultLanguage,
+  fallbackLng : defaultLanguage,
+  compatibilityJSON : 'v3',
+});
 function Navigation() {
   const languageCtx = useLanguage();
   // useEffect(() => {
@@ -220,12 +226,7 @@ function Navigation() {
   // const authCtx = useContext(AuthContext)
   const [session, setSession] = useState<Session | null>(null)
   useEffect(() => {
-    i18next.use(initReactI18next).init({
-      resources : languages,
-      lng : defaultLanguage,
-      fallbackLng : defaultLanguage,
-      compatibilityJSON : 'v3',
-    });
+   
     supabase.auth.getSession().then(({ data: { session } }) => {
 
       setSession(session)
@@ -238,14 +239,7 @@ function Navigation() {
     })
   }, [])
 
-  // const getLanguage =async () => {
-  //   try {
-  //     const lng =  await AsyncStorage.getItem('lng')
-  //     return lng;
-  //   } catch(err) {
-  //     return 'en';
-  //   }
-  // }
+
   useEffect(() => {
     i18next.changeLanguage(languageCtx.language);
   },[languageCtx.language]);
