@@ -51,7 +51,7 @@ const AddCourtForm = ({ navigation }) => {
          }
     })
     const { t } = useTranslation()
-    console.log(formik.isSubmitting)
+    
     const { colors } = useColorTheme()
   return (
     <View style={{
@@ -63,7 +63,7 @@ const AddCourtForm = ({ navigation }) => {
     }}>
         <View style={{ backgroundColor: colors.background, padding: 10, borderRadius: 10,  }}>
             <View style={{ justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center',   }}>
-            <CustomText variant="titleLarge" fontSize={"xl"}>{t('court_location')}</CustomText>
+            <CustomText variant="titleLarge" >{t('court_location')}</CustomText>
             <TouchableOpacity onPress={() => {
                 navigation.goBack();
             }}>
