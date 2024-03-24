@@ -2,6 +2,8 @@ import { createContext, useReducer, useState } from "react"
 import {  startOfMonth, format }  from 'date-fns'
 export const EventsContext = createContext({
   events: [],
+  courts: [],
+  setCourts: (data) => {},
   addEvent: ({
     notes,
     duration,
@@ -53,6 +55,7 @@ function eventsReducer(state, action) {
 
 function EventsContextProvider({ children }) {
   const [eventsState, dispatch] = useReducer(eventsReducer, [])
+  const [courts, setCourts] = useState([]);
   console.log("🚀 ~ EventsContextProvider ~ eventsState:", eventsState)
   const [timelinePeriod, setTimeLinePeriod] = useState('Month');
   const [selectedDate, setSelectedDate] = useState(null);
@@ -86,7 +89,9 @@ function EventsContextProvider({ children }) {
     selectedPeriod,
     setSelectedPeriod,
     graphData,
-    setGraphData
+    setGraphData,
+    courts,
+    setCourts,
   }
 
   return (

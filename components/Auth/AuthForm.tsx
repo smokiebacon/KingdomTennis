@@ -51,14 +51,14 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
   return (
     <View>
       <View>
-        <CustomTextInput 
+        {/* <CustomTextInput 
          label={('email_address')}
          secureTextEntry
          onChangeText={updateInputValueHandler.bind(this, "email")}
          value={enteredEmail}
          keyboardType={"email-address"}
          isValid={emailIsInvalid}
-        />
+        /> */}
         <Input
           secure={false}
           label={t('email_address')}

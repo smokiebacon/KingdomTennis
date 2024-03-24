@@ -1,6 +1,6 @@
 import { View, FlatList, TouchableOpacity } from 'react-native'
 import { Text } from 'native-base'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useLanguage } from '../../languages/LanguageContext'
 import Entypo from '@expo/vector-icons/Entypo';
 import { BaseStyle, GlobalStyles } from '../../constants/styles';
@@ -19,20 +19,24 @@ import CustomTextInput from './TextInput';
 import CustomText from '../common/Text';
 import { useEventForm } from '../../store/eventForm-context';
 import CustomIcon from '../common/Icon';
+import { EventsContext } from '../../store/events-context';
 const SelectCourtForm = ({ navigation }) => {
     const { t } = useTranslation();
     const { colors } = useColorTheme();
     
     const eventsFormCtx = useEventForm()
-    const [favourtes, setFavourites] = useState([]);
-    useEffect(() => {
-      getCourts().then(allCourts => {
-        console.log('fav', allCourts);
-        const fav = allCourts.filter(item => item.is_favourite);
-        setFavourites(fav || []);
-        // setFavourites(favCourts || []);
-      });
-    },[])
+    const eventCtx = useContext(EventsContext);
+    const courts = eventCtx.courts.filter(item => item.is_favourite);
+    // const [favourtes, setFavourites] = useState([]);
+    // const courts = 
+    // useEffect(() => {
+    //   getCourts().then(allCourts => {
+    //     console.log('fav', allCourts);
+    //     const fav = allCourts.filter(item => item.is_favourite);
+    //     setFavourites(fav || []);
+    //     // setFavourites(favCourts || []);
+    //   });
+    // },[])
   return (
     <View style={{
         flex: 1,
@@ -60,7 +64,7 @@ const SelectCourtForm = ({ navigation }) => {
           <View style={{ marginTop: 10, }}>
             <CustomText variant="titleMedium" style={{ marginBottom : 10, }}>Favourite</CustomText>
             {
-              favourtes?.map(court => {
+              courts?.map(court => {
                 return (
                   <TouchableOpacity key={court.id} onPress={() => {
                     eventsFormCtx.changeValue('court', court);

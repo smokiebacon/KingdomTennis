@@ -25,39 +25,11 @@ import ShowPlayer from "./ShowPlayer"
 import { getSessions } from "../../util/http"
 
 
-function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
-  const initialValues = {
-    date: null,
+function EventForm({ onSubmit, isEditting, navigation }) {
 
-  }
-  const validationSchema = Yup.object().shape({
-    date: Yup.date().required('Date is Required'),
-  })
-
-
-  const formik = useFormik({
-    initialValues: initialValues,
-    validationSchema: validationSchema,
-    onSubmit: async (_values) => {
-    }
-  })
-
-
-  const [inputValues, setInputValues] = useState({
-    notes: defaultValues ? defaultValues.notes : "",
-    duration: defaultValues ? defaultValues.duration.toString() : "",
-    date: defaultValues ? defaultValues.date : new Date(),
-    court: defaultValues ? defaultValues.court : "",
-    teammate: defaultValues ? defaultValues.teammate : "",
-    opponent: defaultValues ? defaultValues.opponent : "",
-    opponent2: defaultValues ? defaultValues.opponent2 : "",
-    session: defaultValues ? defaultValues.session : "Rally",
-  })
-  // const theme = useTheme();
   const { colors } = useColorTheme()
   const [showPicker, setShowPicker] = useState(false);
   const [mode, setMode] = useState<any>("date");
-  const [date, setDate] = useState(new Date());
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedPLayerNo, setSelectedPlayerNo] = useState('Single')
   const eventFormCtx = useEventForm()
@@ -70,7 +42,7 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
 
   useEffect(() => {
     supabase.auth.getSession().then(res => {
-        // console.log("res", res.data.session.user.user_metadata);
+        
         setUser(res?.data?.session?.user?.user_metadata);
     })
   },[])
@@ -91,10 +63,7 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
     const minutes = date.getMinutes() + date.getHours() * 60;
     console.log(minutes);
     eventFormCtx.changeValue('duration', minutes);
-    // setInputValues({
-    //   ...inputValues,
-    //   duration: minutes,
-    // })
+
 
     hideDatePicker();
   };
@@ -114,7 +83,7 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
 
   function changeDateToYesterday() {
     const yesterday = subDays(new Date(), 1);
-    setDate(yesterday);
+    eventFormCtx.changeValue('date', yesterday);
   }
 
 
@@ -124,36 +93,30 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
     eventFormCtx.changeValue('date', selectedDate);
   }
 
-  function inputChange(inputIdentifier, enteredValue) {
-    setInputValues((currentInputValues) => {
-      return {
-        ...currentInputValues,
-        [inputIdentifier]: enteredValue,
-      }
-    })
-  }
   async function submitHandler() {
-    if (!inputValues.duration) {
+    if(!eventFormCtx.formValue.duration) {
       return;
     }
     const auth = (await supabase.auth.getSession()).data.session.user.id;
-    const eventData = {
-      notes: inputValues.notes,
-      duration: inputValues.duration,
-      date: format(date, 'yyy-MM-dd'), //should be an Object in DatePicker but Supabase wants as a string
-      court: inputValues.court,
-      teammate: inputValues.teammate,
-      opponent: inputValues.opponent,
-      opponent2: inputValues.opponent2,
-      session: inputValues.session,
-      user_id: auth
+    const formValues = {
+      ...eventFormCtx.formValue,
+      court : eventFormCtx.formValue.court.id,
+      user_id : auth,
     }
-    console.log(eventData);
-    onSubmit(eventData)
+    onSubmit(formValues)
+    eventFormCtx.setValue({
+      notes: "",
+      duration: "",
+      date: new Date(),
+      court: "",
+      teammate: "",
+      opponent: '',
+      opponent2: "",
+      session: "Rally",
+  });
   }
   return (
     <ScrollView>
-
     
     <View style={{ paddingHorizontal: 10, }}>
       {showPicker ? (
@@ -177,6 +140,11 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
       <CustomTextInput
         label={"Date"}
         editable={false}
+        icon={
+          <TouchableOpacity onPress={changeDateToYesterday}>
+            <CustomText>Yesterday</CustomText>
+          </TouchableOpacity>
+        }
         iconLeft={
           <TouchableOpacity
             onPress={showDatepicker}
@@ -285,10 +253,12 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
       <View>
       <CustomText variant={"titleMedium"}>Your Team</CustomText>
       <View style={[style.teamPlayersContainer]}>
-        <ShowPlayer playerName={user?.name} />
+        <ShowPlayer playerName={user?.name} isUserHimself />
         {
           selectedPLayerNo === 'Double' &&
-        <ShowPlayer playerName={eventFormCtx.formValue.teammate} 
+        <ShowPlayer onRemovePlayer={() => {
+          eventFormCtx.changeValue('teammate', '');
+        }} playerName={eventFormCtx.formValue.teammate} 
         onPressAddPlayer={() => {
           navigation.navigate('SelectPlayer', { fieldName : "teammate" })
         }}
@@ -299,12 +269,20 @@ function EventForm({ onSubmit, isEditting, defaultValues, navigation }) {
       <View>
       <CustomText variant={"titleMedium"}>Opponent</CustomText>
       <View style={[style.teamPlayersContainer]}>
-        <ShowPlayer playerName={eventFormCtx.formValue.opponent} onPressAddPlayer={() => {
+        <ShowPlayer
+        onRemovePlayer={() => {
+          eventFormCtx.changeValue('opponent', '');
+        }}
+         playerName={eventFormCtx.formValue.opponent} onPressAddPlayer={() => {
           navigation.navigate('SelectPlayer', { fieldName : "opponent" })
         }} />
         {
             Boolean(selectedPLayerNo === 'Double') &&
-        <ShowPlayer playerName={eventFormCtx.formValue.opponent2} 
+        <ShowPlayer 
+        onRemovePlayer={() => {
+          eventFormCtx.changeValue('opponent2', '');
+        }}
+        playerName={eventFormCtx.formValue.opponent2} 
         onPressAddPlayer={() => {
           navigation.navigate('SelectPlayer', { fieldName : "opponent2" })
         }}

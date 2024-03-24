@@ -25,7 +25,8 @@ export const EventFormContext = createContext({
         session: "Rally",
     },
     setFavouriteCourts : (newCourt:any) => {},
-    changeValue : (prop: string, payload: any) => {}
+    changeValue : (prop: string, payload: any) => {},
+    setValue: (data: any) => {},
 })
 
 function eventFormReducer(state, action) {
@@ -37,6 +38,13 @@ function eventFormReducer(state, action) {
                 formValue : {
                     ...state.formValue,
                     [action?.payload?.prop] : action?.payload?.data,
+                }
+            }
+        case "SET_VALUE":
+            return {
+                ...state,
+                formValue : {
+                    ...action?.payload
                 }
             }
         default:
@@ -51,6 +59,10 @@ function EventFormProvider({ children }) {
         console.log("🚀 ~ changeValue ~ prop:", prop)
         
         dispatch({ type: "ON_CHANGE", payload: { data, prop } });
+    }
+
+    const setValue = (data) => {
+        dispatch({ type: "SET_VALUE", payload:  data});
     }
     const setFavouriteCourts = async (newCourt: any) => {
         console.log(newCourt)
@@ -75,7 +87,7 @@ function EventFormProvider({ children }) {
     }
     // const []
     return (
-        <EventFormContext.Provider value={{...eventFormState, setFavouriteCourts: setFavouriteCourts, changeValue}}>
+        <EventFormContext.Provider value={{...eventFormState, setFavouriteCourts: setFavouriteCourts, changeValue,setValue}}>
             {children}
         </EventFormContext.Provider>
     )

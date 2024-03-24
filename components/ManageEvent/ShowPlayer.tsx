@@ -10,17 +10,28 @@ import CustomIcon from '../common/Icon';
 type ShowPlayerProps= {
     playerName : string;
     onPressAddPlayer? : () => void;
+    onRemovePlayer? : () => void;
+    isUserHimself?: boolean;
 }
-const ShowPlayer:FC<ShowPlayerProps> = ({playerName,onPressAddPlayer}) => {
+const ShowPlayer:FC<ShowPlayerProps> = ({playerName,onPressAddPlayer,onRemovePlayer,isUserHimself = false}) => {
     console.log('playerName', playerName);
     const { colors } = useColorTheme()
+    // onPress={onPressAddPlayer}
     return (
         <>
         {playerName ?
-<TouchableOpacity onPress={onPressAddPlayer} style={[style.teamPlayer]}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems : 'center' }}>
+<View  style={[style.teamPlayer]}>
               <Avatar.Text size={40} label={playerName[0]} style={{ backgroundColor: BaseColor.orangeColor }} ></Avatar.Text>
               <CustomText variant={"titleMedium"}>{playerName}</CustomText>
+            </View>
+            {
+                !isUserHimself &&
+                <TouchableOpacity onPress={onRemovePlayer}>
+                <CustomIcon Iconname='Entypo' name={"cross"} size={30} color={colors.text} />
             </TouchableOpacity>
+            }
+        </View>
             : 
             <View style={[style.teamPlayer]}>
                 <TouchableOpacity onPress={onPressAddPlayer} style={[style.addPlayerIcon,{backgroundColor: colors.card,}]}>
