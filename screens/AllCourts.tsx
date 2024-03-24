@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { FlatList, RefreshControl, StyleSheet, Touchable, TouchableOpacity, View } from 'react-native'
 import { Text, Avatar, ActivityIndicator } from 'react-native-paper'
 import { GlobalStyles } from "../constants/styles";
@@ -8,27 +8,24 @@ import CustomText from "../components/common/Text";
 import CustomIcon from "../components/common/Icon";
 import { useColorTheme } from "../constants/theme";
 import { useEventForm } from "../store/eventForm-context";
+import { EventsContext } from "../store/events-context";
 
 const AllCourts = ({ navigation }) => {
-    const [courts, setCourts] = useState([]);
+    // const [courts, setCourts] = useState([]);
     // const eventFormCtx = useEventForm()
-    console.log("🚀 ~ AllCourts ~ courts:", courts)
-    const [loading, setLoading] = useState(true);
+    // console.log("🚀 ~ AllCourts ~ courts:", courts)
+    const [loading, setLoading] = useState(false);
     const { colors } = useColorTheme()
     const eventsForm = useEventForm();
+    // const courts = 
+    const eventsCtx = useContext(EventsContext);
+    const courts = eventsCtx?.courts || [];
     const fetchPlayerData = async () => {
         setLoading(true);
-        const data = await getCourts();
-        setCourts(data);
+        await  eventsCtx.getAllCourts()
+        
         setLoading(false);
     }
-    useEffect(() => {
-        const subscribe = navigation.addListener('focus', () => {
-            fetchPlayerData();
-        })
-        return () => subscribe;
-    }, [])
-
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
@@ -41,8 +38,8 @@ const AllCourts = ({ navigation }) => {
         })
     }, [])
     const toggleFavourite = async (item) => {
-        const res =  await updateFavourite(item.id, !item.is_favourite);
-        eventsForm.setFavouriteCourts({...item, is_favourite: !item?.is_favourite});
+        await updateFavourite(item.id, !item.is_favourite);
+        // eventsCtx.getAllCourts()
         fetchPlayerData();
     }
     const renderItem = ({ item }) => {
@@ -58,6 +55,7 @@ const AllCourts = ({ navigation }) => {
                     <Button style={{ marginRight: 10 }} onPress={async () => {
                         console.log(item, "line 42")
                         await deleteCourtLocation(item.id);
+                        // eventsCtx.getAllCourts();
                         fetchPlayerData();
                     }}
                     >Remove</Button>
@@ -77,7 +75,7 @@ const AllCourts = ({ navigation }) => {
                 data={courts}
                 renderItem={renderItem}
                 refreshControl={<RefreshControl
-                    onRefresh={fetchPlayerData}
+                    onRefresh={eventsCtx.getAllCourts}
                     refreshing={loading}
                     tintColor={GlobalStyles.colors.primary100}
                 />}

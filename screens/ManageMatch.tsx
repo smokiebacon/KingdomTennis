@@ -48,16 +48,12 @@ function ManageMatch({ route, navigation }) {
   console.log('selectedEvent',selectedEvent);
     useEffect(() => {
       setIsLoading(true);
-      const data = getCourts().then(res => {
-        eventCtx.setCourts(res);
-        console.log('res line 53',res)
-        console.log("selected Event")
+      eventCtx.getAllCourts().then(res => {
         if(isEditting) {
           eventFormCtx.setValue({...selectedEvent, date : new Date(selectedEvent?.date), court : res?.find(item => item.id === Number(selectedEvent?.court))});
-        }  
-      });
-      
-      setIsLoading(false);
+        } 
+        setIsLoading(false);
+      });      
     },[])
   useLayoutEffect(() => {
     navigation.setOptions({

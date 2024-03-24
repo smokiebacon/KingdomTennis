@@ -1,6 +1,6 @@
 import { View, FlatList, TouchableOpacity } from 'react-native'
 import { Text } from 'native-base'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useLanguage } from '../../languages/LanguageContext'
 import Entypo from '@expo/vector-icons/Entypo';
 import { GlobalStyles } from '../../constants/styles';
@@ -18,8 +18,9 @@ import CustomTextInput from './TextInput';
 import { useColorTheme } from '../../constants/theme';
 import CustomText from '../common/Text';
 import CustomIcon from '../common/Icon';
+import { EventsContext } from '../../store/events-context';
 const AddCourtForm = ({ navigation }) => {
-    
+    const eventsCtx =  useContext(EventsContext);
     const formik = useFormik({ 
         initialValues: { 
             name : "",
@@ -38,10 +39,13 @@ const AddCourtForm = ({ navigation }) => {
                 is_favourite : _values.is_favourite,
             }
             const res = await  storeCourtLocation(obj);
+            
             console.log("🚀 ~ onSubmit: ~ obj:", res)
             // const newPlayer =await storePlayer(obj);
             // console.log("🚀 ~ onSubmit: ~ newPlayer:", newPlayer)
             if(res.status === 201) {
+                resetForm();
+                eventsCtx.getAllCourts();
                 navigation.goBack()
             }
          }
@@ -73,7 +77,7 @@ const AddCourtForm = ({ navigation }) => {
                placeholder="Court Location"
                value={formik.values.name}
                onChangeText={formik.handleChange('name')}
-               onBlurHandler={formik.handleBlur('name')}
+            //    onBlurHandler={formik.handleBlur('name')}
 
                error={formik.touched.name && formik.errors.name}
                isValid={formik.touched.name && !formik.errors.name}

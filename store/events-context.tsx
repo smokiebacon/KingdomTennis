@@ -1,9 +1,10 @@
 import { createContext, useReducer, useState } from "react"
 import {  startOfMonth, format }  from 'date-fns'
+import { getCourts } from "../util/http"
 export const EventsContext = createContext({
   events: [],
   courts: [],
-  setCourts: (data) => {},
+  getAllCourts:async () => {},
   addEvent: ({
     notes,
     duration,
@@ -76,6 +77,12 @@ function EventsContextProvider({ children }) {
     dispatch({ type: "UPDATE", payload: { id: id, data: eventData } })
   }
 
+
+  const getAllCourts = async () => {
+    const data =  await getCourts();
+    setCourts(data);
+    return data;
+  }
   const value = {
     events: eventsState,
     addEvent: addEvent,
@@ -91,7 +98,7 @@ function EventsContextProvider({ children }) {
     graphData,
     setGraphData,
     courts,
-    setCourts,
+    getAllCourts,
   }
 
   return (
