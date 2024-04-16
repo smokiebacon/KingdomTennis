@@ -18,6 +18,7 @@ import LoadingOverlay from "../UI/LoadingOverlay"
 import ErrorOverlay from "../UI/ErrorOverlay"
 import { useColorTheme } from "../constants/theme"
 import { useEventForm } from "../store/eventForm-context"
+import { format } from "date-fns"
 
 function ManageMatch({ route, navigation }) {
   const eventCtx = useContext(EventsContext)
@@ -32,9 +33,9 @@ function ManageMatch({ route, navigation }) {
     setIsLoading(true)
     try {
 
-      eventCtx.deleteEvent(editedMatchId)
-      await deleteEventBackend(editedMatchId)
-      navigation.goBack()
+      await deleteEventBackend(editedMatchId);
+      eventCtx.deleteEvent(editedMatchId);
+      navigation.goBack();
     } catch (error) {
       setError("Could not delete event.")
 
@@ -88,8 +89,8 @@ function ManageMatch({ route, navigation }) {
     try {
       if (isEditting) {
         console.log(eventData, 'line 73', editedMatchId);
-        eventCtx.editEvent(editedMatchId, eventData)
-        await updateEvent(editedMatchId, eventData)
+        await updateEvent(editedMatchId, eventData);
+        eventCtx.editEvent(editedMatchId, {...eventData, date: format(new Date(eventData?.date), 'yyyy-MM-dd')});
       } else {
         const id = await storeEvent(eventData)
         eventCtx.addEvent({ ...eventData, id: id })

@@ -46,7 +46,7 @@ function eventsReducer(state, action) {
         } else return item;
       })
       console.log(mapped, 'mapppeddddd')
-      return [...mapped];
+      return mapped;
     case "DELETE":
       return state.filter((event) => event.id !== action.payload)
     default:
@@ -74,6 +74,7 @@ function EventsContextProvider({ children }) {
   }
 
   function editEvent(id, eventData) {
+    console.log("id", id, eventData);
     dispatch({ type: "UPDATE", payload: { id: id, data: eventData } })
   }
 

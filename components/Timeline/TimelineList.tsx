@@ -5,25 +5,29 @@ import {  useContext, useEffect, useRef, useState } from "react"
 import { Swipeable } from "react-native-gesture-handler"
 
 function renderTimelineItem(itemData) {
+  console.log("itemData",itemData)
   return <TimelineItem {...itemData.item} />
 }
 function TimelineList({ events }) {
   const eventsCtx = useContext(EventsContext);
-  const [filteredEvents, setFilteredEvents] = useState(events);
+  const [filteredEvents, setFilteredEvents] = useState([]);
   const scrollRef = useRef<Swipeable>();
 
   useEffect(() => {
-    
     if(eventsCtx?.selectedPeriod) {  
-      const newEvents = events?.filter((item) => {
+      console.log("Hereereree",eventsCtx.events)
+      // console.log("")
+      const newEvents = eventsCtx.events?.filter((item) => {
         const currentDate = item?.date;
+        console.log("currentDate",currentDate)
         const { startDate, endDate } = eventsCtx.selectedPeriod
         return (currentDate >= startDate && currentDate <= endDate)
       })
       setFilteredEvents(newEvents);
     }else {
+      setFilteredEvents(eventsCtx.events);
     }
-  },[eventsCtx.selectedPeriod, events])
+  },[eventsCtx.selectedPeriod, eventsCtx.events])
   return (
     <View style={{ flex: 1, }}>
    <Swipeable 

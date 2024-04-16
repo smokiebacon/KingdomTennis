@@ -102,6 +102,8 @@ function EventForm({ onSubmit, isEditting, navigation }) {
       ...eventFormCtx.formValue,
       court: eventFormCtx.formValue.court.id,
       user_id: auth,
+      // date
+      
     
     }
     // console.log(eventFormCtx.formValue.matchScore, "eventFormCtx.formValue.matchScore")
