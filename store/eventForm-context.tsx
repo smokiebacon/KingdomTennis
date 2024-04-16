@@ -1,6 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, useContext, useReducer } from "react";
 
+export const initialMatchScore = {
+    opponent : 0,
+    myTeam : 0,
+}
 const initialNotes = {
     formValue: {
         notes: "",
@@ -11,8 +15,10 @@ const initialNotes = {
         opponent: '',
         opponent2: "",
         session: "Rally",
+        match_score : [initialMatchScore]
     }
 }
+
 export const EventFormContext = createContext({
     formValue: {
         notes: "",
@@ -23,10 +29,14 @@ export const EventFormContext = createContext({
         opponent: null,
         opponent2: "",
         session: "Rally",
+
+        // match score
+        match_score : []
     },
     setFavouriteCourts : (newCourt:any) => {},
     changeValue : (prop: string, payload: any) => {},
     setValue: (data: any) => {},
+    addNewSet : () => {},
 })
 
 function eventFormReducer(state, action) {
@@ -47,6 +57,14 @@ function eventFormReducer(state, action) {
                     ...action?.payload
                 }
             }
+        case "ADD_NEW_SET" :
+            return {
+                ...state,
+                formValue : {
+                    ...state.formValue,
+                    matchScore : [...state.formValue.matchScore, initialMatchScore],
+                }
+            }
         default:
             return state;
     }
@@ -60,7 +78,10 @@ function EventFormProvider({ children }) {
         
         dispatch({ type: "ON_CHANGE", payload: { data, prop } });
     }
-
+    const addNewSet  = () => {
+        if(eventFormState.formValue.matchScore.length < 5)
+        dispatch({ type: "ADD_NEW_SET" });
+    }
     const setValue = (data) => {
         dispatch({ type: "SET_VALUE", payload:  data});
     }
@@ -87,7 +108,7 @@ function EventFormProvider({ children }) {
     }
     // const []
     return (
-        <EventFormContext.Provider value={{...eventFormState, setFavouriteCourts: setFavouriteCourts, changeValue,setValue}}>
+        <EventFormContext.Provider value={{...eventFormState, setFavouriteCourts: setFavouriteCourts, changeValue,setValue,addNewSet}}>
             {children}
         </EventFormContext.Provider>
     )

@@ -4,6 +4,7 @@ import { format } from "date-fns"
 
 const URL = "https://kingdom-tennis-default-rtdb.firebaseio.com"
 export async function storeEvent(eventData) {
+  console.log("event data", eventData)
   // const response = await axios.post(URL + "/events.json", eventData)
   const supaBaseResponse = await supabase
     .from("Events")
