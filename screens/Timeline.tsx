@@ -112,11 +112,11 @@ function History({ navigation }) {
       : null
       }
       <Timeline events={eventsCtx.events} eventPeriod={eventsCtx.timelinePeriod} />
-      <ActionButton buttonColor={colors.primary} onPress={() => {
+      {/* <ActionButton buttonColor={colors.primary} onPress={() => {
         navigation.navigate("Edit Event")
       }} >
 
-      </ActionButton>
+      </ActionButton> */}
     </>
   )
 }

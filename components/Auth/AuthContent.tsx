@@ -18,6 +18,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
   GoogleSignin.configure({
     scopes: ['https://www.googleapis.com/auth/drive.readonly'],
     webClientId: '716757080003-04kk7jn4ejhg55ilk15u1c6vm2u33m4n.apps.googleusercontent.com',
+    iosClientId: "716757080003-s7mev8e7p1k8vsptajvsi04mv5g5lbmq.apps.googleusercontent.com",
   })
   const navigation = useNavigation<NativeStackNavigationProp<{ Signup : {},Login : {} }>>()
   const [credentialsInvalid, setCredentialsInvalid] = useState({

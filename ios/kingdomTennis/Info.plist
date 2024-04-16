@@ -31,6 +31,17 @@
         </array>
       </dict>
     </array>
+    <key>GIDClientID</key>
+<string>716757080003-s7mev8e7p1k8vsptajvsi04mv5g5lbmq.apps.googleusercontent.com</string>
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>com.googleusercontent.apps.716757080003-s7mev8e7p1k8vsptajvsi04mv5g5lbmq</string>
+    </array>
+  </dict>
+</array>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>LSRequiresIPhoneOS</key>
