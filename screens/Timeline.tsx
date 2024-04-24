@@ -32,6 +32,7 @@ function History({ navigation }) {
       eventsCtx.setSelectedDate(null)
       try {
         const events = await getEvents()
+        await eventsCtx.getAllCourts();
         eventsCtx.setEvents(events)
         if(events?.length) {
           eventsCtx.setSelectedDate(events[0].date);

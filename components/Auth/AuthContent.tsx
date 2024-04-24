@@ -6,6 +6,8 @@ import AuthForm from "./AuthForm"
 import { Colors } from "../../constants/styles"
 import { useNavigation } from "@react-navigation/native"
 import supabase from "../../supabaseClient"
+import { jwtDecode } from "jwt-decode"
+import crypto from 'crypto'
 import {
   GoogleSignin,
   GoogleSigninButton,
@@ -81,15 +83,20 @@ function AuthContent({ isLogin, onAuthenticate }) {
       size={GoogleSigninButton.Size.Wide}
       color={GoogleSigninButton.Color.Dark}
       onPress={async () => {
+        console.log('ehhrhehehh')
         try {
           const available = await GoogleSignin.hasPlayServices()
-          
+          console.log("available",available)
           const userInfo = await GoogleSignin.signIn()
-          
+          // const nonce = crypto.randomUUID();
+       
+
           if (userInfo.idToken) {
+            // const { nonce: nonceVal } = nonce;
             const { data, error } = await supabase.auth.signInWithIdToken({
               provider: 'google',
               token: userInfo.idToken,
+              // nonce: nonceVal,
             })
             console.log(error, data)
           } else {

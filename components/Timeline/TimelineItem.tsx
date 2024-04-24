@@ -4,6 +4,10 @@ import { Card, Text } from "react-native-paper"
 import { getFormattedDate } from "../../util/date"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { useColorTheme } from "../../constants/theme"
+import CustomText from "../common/Text"
+import { useContext } from "react"
+import { EventsContext } from "../../store/events-context"
 function TimelineItem({
   id,
   notes,
@@ -16,7 +20,9 @@ function TimelineItem({
   session,
 }) {
   const navigation = useNavigation<NativeStackNavigationProp<{ "Edit Event" : {},   }>>()
-
+  const { colors } = useColorTheme()
+  const eventCtx = useContext(EventsContext);
+  console.log("eventCtx ",eventCtx.courts?.find(item => item.id == court));
   function timelinePressHandler() {
     navigation.navigate("Edit Event", {
       eventId: id,
@@ -29,33 +35,31 @@ function TimelineItem({
       // android_ripple
     >
       <ScrollView>
-        <Card style={styles.item}>
+        <Card style={[styles.item, { backgroundColor: colors.card }]}>
           <Card.Content>
-            <Text style={styles.textBase} variant="titleLarge">
-              {date}
-            </Text>
-            <Text style={styles.textBase} variant="bodyMedium">
-              {court}
-            </Text>
-            <Text style={styles.textBase} variant="bodyMedium">
-            {session}
-            </Text>
-            <Text style={styles.textBase} variant="bodyMedium">
+            <CustomText variant={"titleMedium"}>Date: {date}</CustomText>
+            <CustomText style={styles.textBase} variant="bodyLarge">
+              Court Name : {eventCtx?.courts?.find(item => item.id == court)?.name}
+            </CustomText>
+            <CustomText style={styles.textBase} variant="bodyMedium">
+              Session Type: {session}
+            </CustomText>
+            {/* <CustomText style={styles.textBase} variant="bodyMedium">
               {teammate}
-            </Text>
-            <Text style={styles.textBase} variant="bodyMedium">
+            </CustomText> */}
+            <CustomText style={styles.textBase} variant="bodyMedium">
               {opponent}
-            </Text>
-            <Text style={styles.textBase} variant="bodyMedium">
+            </CustomText>
+            {/* <CustomText style={styles.textBase} variant="bodyMedium">
               {opponent2}
-            </Text>
-            <Text style={styles.duration} variant="bodyMedium">
+            </CustomText> */}
+            <CustomText style={styles.duration} variant="bodyMedium">
               {duration} hr
-            </Text>
+            </CustomText>
             {/* //if settings true, show notes */}
-            <Text style={styles.textBase} variant="bodyMedium">
+            <CustomText style={styles.textBase} variant="bodyMedium">
               {notes}
-            </Text>
+            </CustomText>
           </Card.Content>
         </Card>
       </ScrollView>
@@ -69,7 +73,7 @@ const styles = StyleSheet.create({
   item: {
     padding: 12,
     marginVertical: 8,
-    backgroundColor: GlobalStyles.colors.primary500,
+    // backgroundColor: GlobalStyles.colors.primary500,
     flexDirection: "row",
     justifyContent: "space-between",
     borderRadius: 6,
@@ -79,7 +83,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
   },
   textBase: {
-    color: GlobalStyles.colors.primary50,
+    // color: GlobalStyles.colors.primary50,
+    marginTop: 5,
   },
   durationContainer: {
     paddingHorizontal: 12,
